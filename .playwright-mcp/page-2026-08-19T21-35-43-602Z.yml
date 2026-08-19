@@ -1,0 +1,97 @@
+- generic [ref=f8e3]:
+  - banner:
+    - navigation [ref=f8e4]:
+      - button "Les Coffrets" [ref=f8e5] [cursor=pointer]
+      - button "Comment ça marche" [ref=f8e6] [cursor=pointer]
+      - button "Livraison Bamako" [ref=f8e7] [cursor=pointer]
+    - button "Commander" [ref=f8e9] [cursor=pointer]
+  - main [ref=f8e14]:
+    - generic:
+      - generic [ref=f8e29] [cursor=pointer]:
+        - generic [ref=f8e30]: M A I S O N
+        - generic [ref=f8e31]: ALICE
+      - generic [ref=f8e37]:
+        - button "Commander" [ref=f8e38] [cursor=pointer]
+        - button "Découvrir" [ref=f8e39] [cursor=pointer]
+      - button "Scroll down to discover" [ref=f8e40] [cursor=pointer]
+      - generic:
+        - paragraph: ////// MANIFESTO
+        - paragraph: L'élégance de la confiserie.Une sélection rigoureuse dedouceurs d'exception pour lespalais les plus exigeants.
+    - generic:
+      - heading "Les Collections" [level=2] [ref=f8e45]
+      - generic [ref=f8e46]:
+        - generic [ref=f8e48]:
+          - generic [ref=f8e49]:
+            - img "Le Coffret Alice" [ref=f8e50]
+            - button [ref=f8e51] [cursor=pointer]
+          - generic [ref=f8e55]:
+            - heading "Le Coffret Alice" [level=3] [ref=f8e56]
+            - paragraph [ref=f8e57]: 15 000 FCFA
+            - paragraph [ref=f8e58]: L'Éveil des Sens & Douceurs Gourmandes
+          - button "Commander" [ref=f8e59] [cursor=pointer]
+        - generic [ref=f8e64]:
+          - generic [ref=f8e65]:
+            - img "Le Coffret Royal du Chapelier" [ref=f8e66]
+            - button [ref=f8e67] [cursor=pointer]
+          - generic [ref=f8e71]:
+            - heading "Le Coffret Royal du Chapelier" [level=3] [ref=f8e72]
+            - paragraph [ref=f8e73]: 25 000 FCFA
+            - paragraph [ref=f8e74]: L'Expérience Ultime de Haute Confiserie
+          - button "Commander" [ref=f8e75] [cursor=pointer]
+        - generic [ref=f8e80]:
+          - generic [ref=f8e81]:
+            - img "Le Coffret Éphémère de la Reine" [ref=f8e82]
+            - button [ref=f8e83] [cursor=pointer]
+          - generic [ref=f8e87]:
+            - heading "Le Coffret Éphémère de la Reine" [level=3] [ref=f8e88]
+            - paragraph [ref=f8e89]: 20 000 FCFA
+            - paragraph [ref=f8e90]: Édition Spéciale & Créations de Saison
+          - button "Commander" [ref=f8e91] [cursor=pointer]
+    - generic:
+      - heading "L'Expérience" [level=2] [ref=f8e96]
+      - generic [ref=f8e97]:
+        - generic [ref=f8e98]:
+          - generic [ref=f8e99]: //01
+          - heading "Choisissez" [level=3] [ref=f8e100]
+          - paragraph [ref=f8e101]: Sélectionnez votre création.
+        - generic [ref=f8e102]:
+          - generic [ref=f8e103]: //02
+          - heading "Commandez" [level=3] [ref=f8e104]
+          - paragraph [ref=f8e105]: Validez votre adresse.
+        - generic [ref=f8e106]:
+          - generic [ref=f8e107]: //03
+          - heading "Recevez" [level=3] [ref=f8e108]
+          - paragraph [ref=f8e109]: Livraison offerte.
+      - button "Débuter" [ref=f8e111] [cursor=pointer]
+    - generic:
+      - heading "Livraison & Paiement" [level=2] [ref=f8e116]
+      - generic [ref=f8e117]:
+        - generic [ref=f8e118]:
+          - generic [ref=f8e119]: //LIVRAISON
+          - heading "Totalement Offerte" [level=3] [ref=f8e120]
+          - paragraph [ref=f8e121]: Partout à Bamako.
+        - generic [ref=f8e122]:
+          - generic [ref=f8e123]: //PAIEMENT
+          - heading "Mobile Money" [level=3] [ref=f8e124]
+          - paragraph [ref=f8e125]: Orange • Wave • Moov
+      - button "Commander" [ref=f8e127] [cursor=pointer]
+  - contentinfo [ref=f8e131]:
+    - generic [ref=f8e132]:
+      - generic [ref=f8e133]:
+        - generic [ref=f8e134] [cursor=pointer]:
+          - generic [ref=f8e135]: ♣
+          - generic [ref=f8e136]:
+            - generic [ref=f8e137]: MAISON
+            - generic [ref=f8e138]: ALICE
+        - generic [ref=f8e139]:
+          - generic [ref=f8e140]: // Copyright © 2026
+          - generic [ref=f8e141]: Maison Alice Bamako.
+          - generic [ref=f8e142]: All Rights Reserved.
+      - generic [ref=f8e143]:
+        - link "Instagram" [ref=f8e144] [cursor=pointer]:
+          - /url: https://instagram.com
+        - link "TikTok" [ref=f8e145] [cursor=pointer]:
+          - /url: https://tiktok.com
+        - link "WhatsApp" [ref=f8e146] [cursor=pointer]:
+          - /url: https://wa.me/22370000000
+      - button "Admin" [ref=f8e148] [cursor=pointer]

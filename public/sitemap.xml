@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://maisonalice.com/</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://maisonalice.com/assets/hatter.jpg</image:loc>
+      <image:title>Maison Alice — Coffret Royal du Chapelier</image:title>
+      <image:caption>Haute Confiserie & Coffrets de Luxe à Bamako</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://maisonalice.com/assets/reine%20coeur.png</image:loc>
+      <image:title>Maison Alice — Coffret de la Reine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://maisonalice.com/assets/cat.webp</image:loc>
+      <image:title>Maison Alice — Nuit Mystique du Chat du Cheshire</image:title>
+    </image:image>
+  </url>
+</urlset>

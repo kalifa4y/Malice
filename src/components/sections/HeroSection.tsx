@@ -18,6 +18,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Centered Main Stage: Logo + Action Buttons (Aligned on central vertical axis) */}
       <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto max-w-2xl mx-auto w-full pt-10 sm:pt-6">
         
+        {/* Semantic H1 for Google Search Indexing & Accessibility */}
+        <h1 className="sr-only">
+          Maison Alice — Haute Confiserie, Chocolats & Coffrets Cadeaux de Luxe à Bamako Mali
+        </h1>
+
         {/* 2. Official Brand Logo (No hover effects, pure transparent background) */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}

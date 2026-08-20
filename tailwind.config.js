@@ -25,8 +25,11 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Google Sans Flex"', 'sans-serif'],
+        sans: ['"Google Sans Flex"', '"Google Sans"', 'sans-serif'],
         serif: ['"Darker Grotesque"', 'sans-serif'],
+        mono: ['"Google Sans Flex"', 'sans-serif'],
+        display: ['"Darker Grotesque"', 'sans-serif'],
+        heading: ['"Darker Grotesque"', 'sans-serif'],
       },
       boxShadow: {
         'glow-primary': '0 0 25px var(--theme-primary-glow)',

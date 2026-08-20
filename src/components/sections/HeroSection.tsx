@@ -62,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.8 }}
         onClick={onExplorePacks}
-        className="absolute bottom-8 left-8 text-white/50 hover:text-white transition-colors items-center gap-2 pointer-events-auto cursor-pointer font-mono text-xs uppercase tracking-widest hidden sm:flex"
+        className="absolute bottom-8 left-8 text-white/50 hover:text-white transition-colors items-center gap-2 pointer-events-auto cursor-pointer font-google-sans text-xs uppercase tracking-widest hidden sm:flex"
       >
         <span>Scroll down to discover</span>
         <ArrowDown className="w-3 h-3 animate-bounce" />
@@ -73,7 +73,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.6 }}
-        className="absolute top-24 right-8 text-right hidden lg:block text-white/50 font-mono text-[10px] sm:text-xs uppercase tracking-widest leading-relaxed"
+        className="absolute top-24 right-8 text-right hidden lg:block text-white/50 font-google-sans text-[10px] sm:text-xs uppercase tracking-widest leading-relaxed"
       >
         <p className="font-bold text-white mb-2">////// MANIFESTO</p>
         <p className="max-w-[250px] ml-auto">

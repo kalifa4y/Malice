@@ -11,7 +11,6 @@ import { BamakoDeliveryPaymentSection } from './components/sections/BamakoDelive
 import { Footer } from './components/sections/Footer';
 import { OrderDrawer } from './components/order/OrderDrawer';
 import { AdminDashboard } from './components/admin/AdminDashboard';
-import { ShoppingBag } from 'lucide-react';
 
 export function App() {
   const { currentTheme } = useTimeTheme();
@@ -126,17 +125,6 @@ export function App() {
         settings={settings}
         onOpenAdmin={navigateToAdmin}
       />
-
-      {/* Floating Action Button (Mobile) */}
-      <div className="fixed bottom-5 right-5 z-40 sm:hidden">
-        <button
-          onClick={() => handleOpenOrder()}
-          className="flex items-center gap-2 px-5 py-3.5 rounded-full font-bold text-white bg-theme-primary shadow-2xl transition-transform active:scale-95 cursor-pointer shadow-glow-primary"
-        >
-          <ShoppingBag className="w-5 h-5" />
-          <span>Commander</span>
-        </button>
-      </div>
 
       {/* Slide-in Order Drawer with Bamako Shipping & WhatsApp Confirmation */}
       <OrderDrawer

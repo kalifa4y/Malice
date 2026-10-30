@@ -9,18 +9,18 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
   const steps = [
     {
       icon: Gift,
-      title: 'Choisissez Votre Écrin',
-      desc: 'Sélectionnez le coffret Maison Alice qui accompagnera votre attention parmi nos créations permanentes et éphémères.'
+      title: 'Choisissez Votre Royaume',
+      desc: "Sélectionnez l'écrin de Marmoreal, le Banquet 10/6 de Tarrant Hightopp ou le Décret Écarlate de Salazen Grum."
     },
     {
       icon: Sparkles,
-      title: 'Ajoutez Votre Mot Doux',
-      desc: 'Rédigez votre message personnel : nous le calligraphions sur une carte scellée à la cire dorée ou rouge.'
+      title: 'Scellez le Parchemin',
+      desc: 'Confiez-nous votre message : il est calligraphié sur un parchemin inspiré de l’Oraculum et scellé à la cire.'
     },
     {
       icon: MapPin,
-      title: 'Recevez Partout à Bamako',
-      desc: 'Indiquez le quartier ou partagez votre position GPS. Notre coursier livre gratuitement en sac isotherme.'
+      title: 'Le Coursier de McTwisp',
+      desc: 'Indiquez votre quartier à Bamako ou partagez votre GPS. Livraison gratuite sous chaîne du froid sur les deux rives.'
     }
   ];
 
@@ -30,11 +30,14 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
       className="relative py-24 px-4 max-w-6xl mx-auto flex flex-col items-center pointer-events-none"
     >
       <div className="text-center max-w-xl mx-auto mb-16 pointer-events-auto">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-theme-gold/30 text-[11px] uppercase tracking-[0.2em] text-theme-gold font-semibold mb-3">
+          <span>Chapitre II • La Chronosphère</span>
+        </div>
         <h2 className="font-serif text-3xl sm:text-5xl font-semibold tracking-tight text-theme-text">
-          Le Rituel de Commande
+          Le Rituel d&apos;Underland en 3 Actes
         </h2>
         <p className="mt-3 text-sm sm:text-base text-theme-text-muted">
-          Une expérience fluide pensée pour offrir ou se faire plaisir en quelques instants à Bamako.
+          Une traversée de l&apos;autre côté du miroir pour offrir ou savourer nos créations à Bamako.
         </p>
       </div>
 
@@ -51,8 +54,8 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
                   <div className="w-12 h-12 rounded-2xl bg-theme-surface border border-theme-gold/40 flex items-center justify-center text-theme-gold shadow-glow-gold">
                     <IconComponent className="w-5 h-5" />
                   </div>
-                  <span className="font-mono text-xs font-semibold text-theme-text-muted px-3 py-1 rounded-full bg-white/5 border border-white/10">
-                    Étape {idx + 1}
+                  <span className="font-mono text-xs font-semibold text-theme-gold px-3 py-1 rounded-full bg-white/5 border border-theme-gold/30">
+                    Acte {idx + 1}
                   </span>
                 </div>
 
@@ -74,7 +77,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
           onClick={onOpenOrder}
           className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-theme-primary text-white font-semibold tracking-wider uppercase hover:brightness-110 transition-all duration-300 shadow-glow-primary text-xs sm:text-sm cursor-pointer"
         >
-          <span>Composer ma commande</span>
+          <span>Ouvrir le Grimoire de Commande</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

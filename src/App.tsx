@@ -88,10 +88,10 @@ export function App() {
 
   return (
     <div className="relative min-h-screen selection:bg-theme-primary selection:text-white font-sans text-theme-text overflow-x-hidden">
-      {/* 3D WebGL Haute Confiserie & Wonderland Scene (Three.js + Anime.js) */}
+      {/* 3D WebGL Underland & Haute Confiserie Scene (Three.js + Anime.js) */}
       <Confectionery3DScene currentTheme={currentTheme} />
 
-      {/* Floating Luxury Header with "Les 3 Heures d'Alice" Theme Switcher */}
+      {/* Floating Luxury Header with "Les 3 Royaumes d'Underland" Switcher */}
       <LuxuryHeader
         onOpenOrder={() => handleOpenOrder()}
         currentTheme={currentTheme}
@@ -110,17 +110,19 @@ export function App() {
           onOpenOrder={() => handleOpenOrder()}
           onExplorePacks={handleExplorePacks}
           currentTheme={currentTheme}
+          allThemes={allThemes}
+          onSelectTheme={setManualTheme}
           siteNotice={settings.siteNotice}
         />
 
-        {/* 2. Detailed Collections Showcase */}
+        {/* 2. Detailed Underland Collections Showcase */}
         <PackShowcase
           packs={packs}
           currentTheme={currentTheme}
           onSelectPack={(pack) => handleOpenOrder(pack)}
         />
 
-        {/* 3. The 3-Step Ordering Ritual */}
+        {/* 3. The 3-Step Oraculum Ordering Ritual */}
         <HowItWorksSection onOpenOrder={() => handleOpenOrder()} />
 
         {/* 4. Free Bamako Insulated Delivery & Mobile Money Payments */}

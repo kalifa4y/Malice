@@ -4,75 +4,87 @@
 
 @layer base {
   :root {
-    /* Default theme: Cheshire Cat (Nocturne 00h-08h) */
-    --theme-bg: #070b14;
-    --theme-bg-translucent: rgba(7, 11, 20, 0.88);
-    --theme-surface: #101829;
-    --theme-surface-hover: #17223a;
-    --theme-border: rgba(212, 175, 55, 0.24);
-    --theme-primary: #00d4e6;
-    --theme-primary-hover: #38f9d7;
-    --theme-primary-glow: rgba(0, 212, 230, 0.35);
-    --theme-accent: #a78bfa;
-    --theme-gold: #e6be5a;
-    --theme-gold-glow: rgba(230, 190, 90, 0.35);
-    --theme-text: #f8fafc;
-    --theme-text-muted: #b0bfd4;
-    --theme-card: rgba(13, 20, 35, 0.82);
+    /* Default Realm: Bois de Tulgey · Monde de la Nuit (Tarrant Hightopp 10/6 & Cheshire) */
+    --theme-bg: #061318;
+    --theme-bg-translucent: rgba(6, 19, 24, 0.88);
+    --theme-surface: #0c222b;
+    --theme-surface-hover: #13313d;
+    --theme-border: rgba(229, 154, 56, 0.32);
+    --theme-primary: #18b8a6;
+    --theme-primary-hover: #2dd4bf;
+    --theme-primary-glow: rgba(24, 184, 166, 0.42);
+    --theme-accent: #e07828;
+    --theme-gold: #e59a38;
+    --theme-gold-glow: rgba(229, 154, 56, 0.4);
+    --theme-text: #eefaf8;
+    --theme-text-muted: #94bbb6;
+    --theme-card: rgba(10, 29, 37, 0.84);
+    --realm-atmosphere: radial-gradient(circle at 20% 15%, rgba(24, 184, 166, 0.16) 0%, transparent 45%),
+      radial-gradient(circle at 80% 25%, rgba(224, 120, 40, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(12, 34, 43, 0.9) 0%, #061318 100%);
   }
 
-  /* Theme 1: Cheshire Cat (Nocturne 00h00 - 08h00) */
+  /* Royaume II: Bois de Tulgey · Monde de la Nuit (00h00 - 08h00) — Tarrant Hightopp 10/6 & Cheshire */
   [data-theme="cheshire_night"] {
-    --theme-bg: #070b14;
-    --theme-bg-translucent: rgba(7, 11, 20, 0.88);
-    --theme-surface: #101829;
-    --theme-surface-hover: #17223a;
-    --theme-border: rgba(0, 212, 230, 0.24);
-    --theme-primary: #00d4e6;
-    --theme-primary-hover: #38f9d7;
-    --theme-primary-glow: rgba(0, 212, 230, 0.35);
-    --theme-accent: #a78bfa;
-    --theme-gold: #e6be5a;
-    --theme-gold-glow: rgba(230, 190, 90, 0.35);
-    --theme-text: #f8fafc;
-    --theme-text-muted: #b0bfd4;
-    --theme-card: rgba(13, 20, 35, 0.82);
+    --theme-bg: #061318;
+    --theme-bg-translucent: rgba(6, 19, 24, 0.88);
+    --theme-surface: #0c222b;
+    --theme-surface-hover: #13313d;
+    --theme-border: rgba(229, 154, 56, 0.32);
+    --theme-primary: #18b8a6;
+    --theme-primary-hover: #2dd4bf;
+    --theme-primary-glow: rgba(24, 184, 166, 0.42);
+    --theme-accent: #e07828;
+    --theme-gold: #e59a38;
+    --theme-gold-glow: rgba(229, 154, 56, 0.4);
+    --theme-text: #eefaf8;
+    --theme-text-muted: #94bbb6;
+    --theme-card: rgba(10, 29, 37, 0.84);
+    --realm-atmosphere: radial-gradient(circle at 20% 15%, rgba(24, 184, 166, 0.16) 0%, transparent 45%),
+      radial-gradient(circle at 80% 25%, rgba(224, 120, 40, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(12, 34, 43, 0.9) 0%, #061318 100%);
   }
 
-  /* Theme 2: Mad Hatter (Diurne 08h00 - 16h00) */
+  /* Royaume I: Marmoreal · Monde Éveillé (08h00 - 16h00) — Cour de la Reine Blanche & Jardin d'Absolem */
   [data-theme="mad_hatter_day"] {
-    --theme-bg: #0d160c;
-    --theme-bg-translucent: rgba(13, 22, 12, 0.88);
-    --theme-surface: #162614;
-    --theme-surface-hover: #20361d;
-    --theme-border: rgba(212, 175, 55, 0.28);
-    --theme-primary: #e25822;
-    --theme-primary-hover: #ff7235;
-    --theme-primary-glow: rgba(226, 88, 34, 0.38);
-    --theme-accent: #e06d63;
-    --theme-gold: #e5c158;
-    --theme-gold-glow: rgba(229, 193, 88, 0.38);
-    --theme-text: #fdfbf7;
-    --theme-text-muted: #c2d1ba;
-    --theme-card: rgba(20, 34, 18, 0.82);
+    --theme-bg: #160f24;
+    --theme-bg-translucent: rgba(22, 15, 36, 0.88);
+    --theme-surface: #231838;
+    --theme-surface-hover: #2f204a;
+    --theme-border: rgba(235, 200, 107, 0.34);
+    --theme-primary: #d93870;
+    --theme-primary-hover: #ec5387;
+    --theme-primary-glow: rgba(217, 56, 112, 0.42);
+    --theme-accent: #c4b5fd;
+    --theme-gold: #ebc86b;
+    --theme-gold-glow: rgba(235, 200, 107, 0.4);
+    --theme-text: #faf5ff;
+    --theme-text-muted: #c8b6dc;
+    --theme-card: rgba(28, 19, 45, 0.84);
+    --realm-atmosphere: radial-gradient(circle at 50% 10%, rgba(196, 181, 253, 0.2) 0%, transparent 48%),
+      radial-gradient(circle at 82% 28%, rgba(217, 56, 112, 0.16) 0%, transparent 48%),
+      radial-gradient(circle at 18% 65%, rgba(235, 200, 107, 0.12) 0%, #160f24 100%);
   }
 
-  /* Theme 3: Queen of Hearts (Crépuscule 16h00 - 00h00) */
+  /* Royaume III: Salazen Grum · La Cour Écarlate (16h00 - 00h00) — Royaume de la Reine Rouge Iracebeth */
   [data-theme="queen_of_hearts_evening"] {
-    --theme-bg: #10060c;
-    --theme-bg-translucent: rgba(16, 6, 12, 0.88);
-    --theme-surface: #1e0b18;
-    --theme-surface-hover: #2b1123;
-    --theme-border: rgba(220, 20, 60, 0.28);
-    --theme-primary: #dc143c;
-    --theme-primary-hover: #f42c54;
-    --theme-primary-glow: rgba(220, 20, 60, 0.4);
-    --theme-accent: #4fc3f7;
-    --theme-gold: #f0c954;
-    --theme-gold-glow: rgba(240, 201, 84, 0.38);
-    --theme-text: #fff9fa;
-    --theme-text-muted: #d1b4c2;
-    --theme-card: rgba(26, 10, 21, 0.82);
+    --theme-bg: #130508;
+    --theme-bg-translucent: rgba(19, 5, 8, 0.88);
+    --theme-surface: #240910;
+    --theme-surface-hover: #330d17;
+    --theme-border: rgba(220, 30, 53, 0.34);
+    --theme-primary: #dc1e35;
+    --theme-primary-hover: #f23047;
+    --theme-primary-glow: rgba(220, 30, 53, 0.45);
+    --theme-accent: #f59e0b;
+    --theme-gold: #dfb742;
+    --theme-gold-glow: rgba(223, 183, 66, 0.4);
+    --theme-text: #fdf2f4;
+    --theme-text-muted: #cfa3ac;
+    --theme-card: rgba(30, 8, 14, 0.85);
+    --realm-atmosphere: radial-gradient(circle at 78% 18%, rgba(220, 30, 53, 0.2) 0%, transparent 48%),
+      radial-gradient(circle at 22% 30%, rgba(223, 183, 66, 0.14) 0%, transparent 45%),
+      radial-gradient(circle at 50% 85%, rgba(36, 9, 16, 0.92) 0%, #130508 100%);
   }
 
   html {
@@ -81,9 +93,11 @@
 
   body {
     background-color: var(--theme-bg);
+    background-image: var(--realm-atmosphere);
+    background-attachment: fixed;
     color: var(--theme-text);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1), color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1), color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -112,27 +126,41 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Luxury Surfaces & Cards */
+/* Underland & Oraculum Luxury Surfaces */
 .glass-panel {
   background: var(--theme-card);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--theme-border);
-  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 22px 55px -15px rgba(0, 0, 0, 0.72), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--theme-border);
+}
+
+.oraculum-frame {
+  position: relative;
+}
+
+.oraculum-frame::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--theme-border);
+  opacity: 0.45;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .luxury-divider {
   height: 1px;
   width: 100%;
   background: linear-gradient(90deg, transparent, var(--theme-gold), transparent);
-  opacity: 0.35;
+  opacity: 0.45;
 }
 
 /* Custom Scrollbar */

@@ -67,22 +67,22 @@ describe('Maison Alice — Business Logic, Admin Email Recovery & Verification T
     });
   });
 
-  describe('3. Dynamic Time Themes & Font Pairings', () => {
-    it('defines the 3 mandatory themes with corresponding characters and card suits', () => {
+  describe('3. Dynamic Underland Realms & Palettes', () => {
+    it('defines the 3 Underland Realms (Marmoreal, Bois de Tulgey 10/6, Salazen Grum) with distinct palettes', () => {
       expect(THEMES.cheshire_night).toBeDefined();
-      expect(THEMES.cheshire_night.character).toBe('Chat du Cheshire');
+      expect(THEMES.cheshire_night.name).toBe('Bois de Tulgey • 10/6');
       expect(THEMES.cheshire_night.cardSuit).toBe('spade');
-      expect(THEMES.cheshire_night.titleFontName).toBe('Metroway');
+      expect(THEMES.cheshire_night.colors.primary).toBe('#18b8a6');
 
       expect(THEMES.mad_hatter_day).toBeDefined();
-      expect(THEMES.mad_hatter_day.character).toBe('Chapelier Fou');
+      expect(THEMES.mad_hatter_day.name).toBe('Royaume de Marmoreal');
       expect(THEMES.mad_hatter_day.cardSuit).toBe('club');
-      expect(THEMES.mad_hatter_day.titleFontName).toBe('Neogen');
+      expect(THEMES.mad_hatter_day.colors.primary).toBe('#d93870');
 
       expect(THEMES.queen_of_hearts_evening).toBeDefined();
-      expect(THEMES.queen_of_hearts_evening.character).toBe('Reine de Cœur');
+      expect(THEMES.queen_of_hearts_evening.name).toBe('Cour de Salazen Grum');
       expect(THEMES.queen_of_hearts_evening.cardSuit).toBe('heart');
-      expect(THEMES.queen_of_hearts_evening.titleFontName).toBe('Perfect Girl Sans Serif');
+      expect(THEMES.queen_of_hearts_evening.colors.primary).toBe('#dc1e35');
     });
   });
 

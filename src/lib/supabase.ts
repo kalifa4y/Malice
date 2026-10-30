@@ -5,7 +5,9 @@ import { INITIAL_PACKS, BAMAKO_DELIVERY_ZONES, DEFAULT_STORE_SETTINGS } from './
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl !== 'https://your-project.supabase.co');
+export const isSupabaseConfigured = Boolean(
+  supabaseUrl && supabaseAnonKey && supabaseUrl !== 'https://your-project.supabase.co'
+);
 
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
@@ -14,7 +16,7 @@ export const supabase = isSupabaseConfigured
 // Local Persistence Fallback for offline, preview & demo
 const STORAGE_KEYS = {
   ORDERS: 'maison_alice_orders',
-  PACKS: 'maison_alice_packs',
+  PACKS: 'maison_alice_packs_v2',
   ZONES: 'maison_alice_zones',
   SETTINGS: 'maison_alice_settings',
   ADMIN_SESSION: 'maison_alice_admin_auth'
@@ -41,7 +43,7 @@ export const localDB = {
 
   updateOrderStatus: (orderId: string, status: Order['status']): void => {
     const orders = localDB.getOrders();
-    const index = orders.findIndex(o => o.id === orderId);
+    const index = orders.findIndex((o) => o.id === orderId);
     if (index !== -1) {
       orders[index].status = status;
       orders[index].updatedAt = new Date().toISOString();

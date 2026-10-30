@@ -25,14 +25,16 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
       id="packs-showcase"
       className="relative py-24 sm:py-32 px-4 max-w-7xl mx-auto flex flex-col items-center pointer-events-none"
     >
-      {/* Section Heading */}
+      {/* Section Heading with Oraculum Filigree */}
       <div className="text-center max-w-2xl mx-auto mb-16 pointer-events-auto">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-theme-gold/30 text-[11px] uppercase tracking-[0.2em] text-theme-gold font-semibold mb-3">
+          <span>Chapitre I • Le Grimoire de l&apos;Oraculum</span>
+        </div>
         <h2 className="font-serif text-3xl sm:text-5xl font-semibold tracking-tight text-theme-text">
-          Les Coffrets de la Maison
+          Les Écrins Royaux d&apos;Underland
         </h2>
         <p className="mt-4 text-sm sm:text-base text-theme-text-muted leading-relaxed">
-          Chaque écrin est préparé à la commande à Bamako, accompagné de ses attributs dorés et de sa
-          carte personnalisée scellée à la cire.
+          De la table éternelle de Tarrant Hightopp (10/6) aux jardins de Marmoreal et à la cour de Salazen Grum : chaque coffret est façonné à la commande à Bamako et scellé à la cire.
         </p>
       </div>
 
@@ -45,7 +47,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
               key={pack.id}
               className={`group relative rounded-3xl glass-panel flex flex-col justify-between overflow-hidden transition-all duration-500 hover:-translate-y-1.5 ${
                 isFeatured
-                  ? 'border-theme-gold/60 shadow-glow-gold ring-1 ring-theme-gold/30'
+                  ? 'border-theme-gold/65 shadow-glow-gold ring-1 ring-theme-gold/35'
                   : 'border-theme-border hover:border-theme-gold/50'
               }`}
             >
@@ -58,7 +60,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
                   {pack.badge && (
                     <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-theme-gold/40 text-xs font-semibold text-theme-text">
@@ -85,7 +87,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                   <div className="flex items-baseline justify-between pb-4 border-b border-white/10">
                     <div>
                       <span className="text-xs uppercase tracking-wider text-theme-text-muted block">
-                        Tarif Tout Compris
+                        Offrande Tout Compris
                       </span>
                       <span className="text-[11px] text-emerald-400 font-medium">
                         Livraison isotherme offerte à Bamako
@@ -108,7 +110,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                   {pack.contents && pack.contents.length > 0 && (
                     <div className="space-y-2.5">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-theme-gold">
-                        Composition de l&apos;Écrin ({pack.contents.length} créations)
+                        Reliques &amp; Douceurs de l&apos;Écrin ({pack.contents.length} pièces)
                       </h4>
                       <ul className="space-y-2">
                         {pack.contents.map((item, i) => (
@@ -130,7 +132,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                   {pack.features && pack.features.length > 0 && (
                     <div className="pt-4 border-t border-white/10 space-y-2">
                       <h4 className="text-[11px] font-semibold uppercase tracking-wider text-theme-text-muted">
-                        Attention &amp; Finitions
+                        Sceau &amp; Privilèges
                       </h4>
                       <div className="flex flex-wrap gap-1.5">
                         {pack.features.map((feat, i) => (
@@ -159,7 +161,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                       : 'bg-white/10 hover:bg-theme-primary text-white border border-white/15 hover:border-theme-primary'
                   }`}
                 >
-                  <span>Commander ce coffret</span>
+                  <span>Choisir cet Écrin</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

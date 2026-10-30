@@ -1,22 +1,36 @@
 import React, { useState } from 'react';
 import { StoreSettings } from '../../../types';
-import { 
-  Save, 
-  Smartphone, 
-  Globe, 
-  ShieldCheck, 
-  CheckCircle2, 
-  AlertCircle, 
-  Eye, 
-  EyeOff, 
-  MessageCircle, 
-  MapPin, 
-  Phone, 
-  Lock 
+import { registerAdminAccount, generateBackupRecoveryKey } from '../../../lib/adminAuth';
+import {
+  Save,
+  Smartphone,
+  Globe,
+  ShieldCheck,
+  CheckCircle2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  MessageCircle,
+  MapPin,
+  Phone,
+  Lock,
+  Mail,
+  KeyRound,
+  Copy,
+  RefreshCw
 } from 'lucide-react';
 
-const InstagramIcon = ({ className = "w-3.5 h-3.5 text-pink-400" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const InstagramIcon = ({ className = 'w-3.5 h-3.5 text-pink-400' }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
@@ -29,7 +43,7 @@ interface SettingsManagerProps {
 }
 
 export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSaveSettings }) => {
-  const [activeTab, setActiveTab] = useState<'payments' | 'footer' | 'security'>('payments');
+  const [activeTab, setActiveTab] = useState<'security' | 'payments' | 'footer'>('security');
   const [localSettings, setLocalSettings] = useState<StoreSettings>({
     ...settings,
     footerLinks: {
@@ -43,15 +57,14 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
     }
   });
 
-  // Password change states
+  // Email & Password states
+  const [adminEmailInput, setAdminEmailInput] = useState(settings.adminEmail || '');
   const [currentPasswordInput, setCurrentPasswordInput] = useState('');
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
   const [showPasswords, setShowPasswords] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
-
-  // Global save notification
   const [saveSuccessNotice, setSaveSuccessNotice] = useState<string | null>(null);
 
   const showNotification = (msg: string) => {
@@ -63,37 +76,49 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
 
   const handleSaveGeneral = () => {
     onSaveSettings(localSettings);
-    showNotification('Paramètres enregistrés avec succès !');
+    showNotification('Paramètres enregistrés avec succès.');
   };
 
-  const handleUpdatePassword = (e: React.FormEvent) => {
+  const handleUpdateAccountSecurity = (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordError(null);
     setPasswordSuccess(null);
 
-    const actualCurrentPassword = localSettings.adminPassword || 'admin';
+    const cleanEmail = adminEmailInput.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setPasswordError('Veuillez saisir une adresse email valide pour la récupération du compte.');
+      return;
+    }
 
-    // Verify current password
-    if (currentPasswordInput.trim() !== actualCurrentPassword && !(actualCurrentPassword === 'admin' && currentPasswordInput.trim() === 'alice2026')) {
+    const actualCurrentPassword = localSettings.adminPassword || 'admin';
+    if (
+      currentPasswordInput.trim() !== actualCurrentPassword &&
+      !(actualCurrentPassword === 'admin' && currentPasswordInput.trim() === 'alice2026')
+    ) {
       setPasswordError('Le mot de passe actuel saisi est incorrect.');
       return;
     }
 
-    // Validate new password
-    if (!newPasswordInput || newPasswordInput.length < 4) {
-      setPasswordError('Le nouveau mot de passe doit contenir au moins 4 caractères.');
-      return;
+    const finalPassword = newPasswordInput.trim()
+      ? newPasswordInput.trim()
+      : actualCurrentPassword;
+
+    if (newPasswordInput.trim()) {
+      if (newPasswordInput.trim().length < 4) {
+        setPasswordError('Le nouveau mot de passe doit contenir au moins 4 caractères.');
+        return;
+      }
+      if (newPasswordInput !== confirmPasswordInput) {
+        setPasswordError('La confirmation ne correspond pas au nouveau mot de passe.');
+        return;
+      }
     }
 
-    if (newPasswordInput !== confirmPasswordInput) {
-      setPasswordError('La confirmation ne correspond pas au nouveau mot de passe.');
-      return;
-    }
-
-    const updated = {
-      ...localSettings,
-      adminPassword: newPasswordInput.trim()
-    };
+    const { settings: updated } = registerAdminAccount(
+      cleanEmail,
+      finalPassword,
+      localSettings.adminRecoveryKey
+    );
 
     setLocalSettings(updated);
     onSaveSettings(updated);
@@ -101,28 +126,41 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
     setCurrentPasswordInput('');
     setNewPasswordInput('');
     setConfirmPasswordInput('');
-    setPasswordSuccess('Votre mot de passe administrateur a été modifié avec succès.');
-    showNotification('Mot de passe administrateur mis à jour !');
+    setPasswordSuccess(
+      'Votre adresse email administrateur et vos identifiants ont été enregistrés avec succès.'
+    );
+    showNotification('Sécurité du compte mise à jour.');
+  };
+
+  const handleRegenerateRecoveryKey = () => {
+    const newKey = generateBackupRecoveryKey();
+    const updated: StoreSettings = {
+      ...localSettings,
+      adminRecoveryKey: newKey
+    };
+    setLocalSettings(updated);
+    onSaveSettings(updated);
+    showNotification('Nouvelle clé de secours générée.');
   };
 
   return (
-    <div className="space-y-6 font-google-sans max-w-4xl">
-      
+    <div className="space-y-6 font-sans max-w-4xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold font-darker-grotesque text-white">
-            Paramètres & Configuration
+          <h2 className="font-serif text-3xl font-bold text-white">
+            Paramètres &amp; Sécurité
           </h2>
           <p className="text-xs text-theme-text-muted mt-1">
-            Gérez vos comptes marchands, coordonnées, liens du footer et sécurité d'accès.
+            Gérez votre email de récupération administrateur, vos comptes Mobile Money et les liens du footer.
           </p>
         </div>
 
         {activeTab !== 'security' && (
           <button
+            type="button"
             onClick={handleSaveGeneral}
-            className="px-5 py-2.5 rounded-xl bg-theme-primary text-white font-bold text-xs shadow-glow-primary hover:brightness-110 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-theme-primary text-white font-semibold text-xs shadow-glow-primary hover:brightness-110 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>Enregistrer les modifications</span>
@@ -130,423 +168,153 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
         )}
       </div>
 
-      {/* Global Success Notification */}
       {saveSuccessNotice && (
-        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3 text-sm text-emerald-300 shadow-glow-primary animate-in fade-in slide-in-from-top-2">
+        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3 text-sm text-emerald-300">
           <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-emerald-400" />
-          <span className="font-semibold">{saveSuccessNotice}</span>
+          <span className="font-medium">{saveSuccessNotice}</span>
         </div>
       )}
 
       {/* Navigation Tabs */}
       <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
         <button
+          type="button"
+          onClick={() => setActiveTab('security')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+            activeTab === 'security'
+              ? 'bg-theme-primary text-white shadow-glow-primary'
+              : 'bg-theme-surface/50 border border-white/10 text-theme-text-muted hover:text-white'
+          }`}
+        >
+          <ShieldCheck className="w-4 h-4 text-theme-gold" />
+          <span>1. Email Admin &amp; Mot de Passe</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveTab('payments')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'payments'
               ? 'bg-theme-primary text-white shadow-glow-primary'
               : 'bg-theme-surface/50 border border-white/10 text-theme-text-muted hover:text-white'
           }`}
         >
           <Smartphone className="w-4 h-4" />
-          <span>1. Paiements Mobile Money</span>
+          <span>2. Paiements Mobile Money</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab('footer')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'footer'
               ? 'bg-theme-primary text-white shadow-glow-primary'
               : 'bg-theme-surface/50 border border-white/10 text-theme-text-muted hover:text-white'
           }`}
         >
           <Globe className="w-4 h-4 text-theme-gold" />
-          <span>2. Liens Footer & Coordonnées</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('security')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === 'security'
-              ? 'bg-theme-primary text-white shadow-glow-primary'
-              : 'bg-theme-surface/50 border border-white/10 text-theme-text-muted hover:text-white'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4 text-cyan-400" />
-          <span>3. Mot de Passe & Sécurité</span>
+          <span>3. Liens Footer &amp; Coordonnées</span>
         </button>
       </div>
 
-      {/* TAB 1: Mobile Money Payments */}
-      {activeTab === 'payments' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          
-          {/* Orange Money */}
-          <div className="p-6 rounded-3xl bg-orange-500/10 border border-orange-500/30 space-y-4 backdrop-blur-md">
-            <div className="flex items-center gap-2 text-base font-bold text-orange-400">
-              <div className="w-3 h-3 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.6)]" />
-              <span>Orange Money Mali</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Numéro Marchand :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.orange_money.number}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.orange_money.number = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-orange-400 outline-none"
-                  placeholder="+223 70 00 00 00"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Nom du Titulaire :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.orange_money.name}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.orange_money.name = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-orange-400 outline-none"
-                  placeholder="Maison Alice SARL"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Wave */}
-          <div className="p-6 rounded-3xl bg-blue-500/10 border border-blue-500/30 space-y-4 backdrop-blur-md">
-            <div className="flex items-center gap-2 text-base font-bold text-blue-400">
-              <div className="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.6)]" />
-              <span>Wave Mali</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Numéro Wave :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.wave.number}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.wave.number = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-blue-400 outline-none"
-                  placeholder="+223 70 00 00 00"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Nom du Titulaire :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.wave.name}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.wave.name = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-blue-400 outline-none"
-                  placeholder="Maison Alice SARL"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Moov Money */}
-          <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 space-y-4 backdrop-blur-md">
-            <div className="flex items-center gap-2 text-base font-bold text-emerald-400">
-              <div className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" />
-              <span>Moov Money Mali</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Numéro Moov :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.moov_money.number}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.moov_money.number = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-emerald-400 outline-none"
-                  placeholder="+223 60 00 00 00"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">Nom du Titulaire :</label>
-                <input
-                  type="text"
-                  value={localSettings.merchantPhones.moov_money.name}
-                  onChange={e => {
-                    const updated = { ...localSettings };
-                    updated.merchantPhones.moov_money.name = e.target.value;
-                    setLocalSettings(updated);
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-emerald-400 outline-none"
-                  placeholder="Maison Alice SARL"
-                />
-              </div>
-            </div>
-          </div>
-
-        </div>
-      )}
-
-      {/* TAB 2: Footer Links & Contact Info */}
-      {activeTab === 'footer' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="p-6 rounded-3xl bg-black/40 border border-white/10 backdrop-blur-xl space-y-6">
-            <h3 className="text-base font-bold font-darker-grotesque text-white flex items-center gap-2">
-              <Globe className="w-5 h-5 text-theme-gold" />
-              <span>Réseaux Sociaux & Liens du Footer</span>
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Instagram */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
-                  <span>Lien Instagram :</span>
-                </label>
-                <input
-                  type="url"
-                  value={localSettings.footerLinks?.instagram || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, instagram: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="https://instagram.com/maisonalice_bamako"
-                />
-              </div>
-
-              {/* TikTok */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <span>🎵</span>
-                  <span>Lien TikTok :</span>
-                </label>
-                <input
-                  type="url"
-                  value={localSettings.footerLinks?.tiktok || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, tiktok: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="https://tiktok.com/@maisonalice"
-                />
-              </div>
-
-              {/* WhatsApp Footer Link */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Lien WhatsApp Direct :</span>
-                </label>
-                <input
-                  type="url"
-                  value={localSettings.footerLinks?.whatsapp || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, whatsapp: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="https://wa.me/22370000000"
-                />
-              </div>
-
-              {/* Facebook */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <span>📘</span>
-                  <span>Lien Facebook (Optionnel) :</span>
-                </label>
-                <input
-                  type="url"
-                  value={localSettings.footerLinks?.facebook || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, facebook: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="https://facebook.com/maisonalice"
-                />
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Address */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-theme-primary" />
-                  <span>Adresse / Localisation à Bamako :</span>
-                </label>
-                <input
-                  type="text"
-                  value={localSettings.footerLinks?.address || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, address: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="ACI 2000, Bamako - Mali"
-                />
-              </div>
-
-              {/* Direct Phone */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
-                  <Phone className="w-3.5 h-3.5 text-theme-gold" />
-                  <span>Téléphone Appel Client :</span>
-                </label>
-                <input
-                  type="text"
-                  value={localSettings.footerLinks?.phone || ''}
-                  onChange={e => {
-                    setLocalSettings({
-                      ...localSettings,
-                      footerLinks: { ...localSettings.footerLinks, phone: e.target.value }
-                    });
-                  }}
-                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm font-mono text-theme-text focus:border-theme-primary outline-none"
-                  placeholder="+223 70 00 00 00"
-                />
-              </div>
-            </div>
-
-            {/* Legal text */}
-            <div className="pt-2">
-              <label className="text-xs font-bold text-theme-text-muted block mb-1.5">
-                Texte Légal & Copyright :
-              </label>
-              <input
-                type="text"
-                value={localSettings.footerLinks?.legalText || ''}
-                onChange={e => {
-                  setLocalSettings({
-                    ...localSettings,
-                    footerLinks: { ...localSettings.footerLinks, legalText: e.target.value }
-                  });
-                }}
-                className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-theme-primary outline-none"
-                placeholder="Maison Alice SARL — Bamako."
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 3: Admin Password & Security */}
+      {/* TAB 1: Admin Email & Password Recovery */}
       {activeTab === 'security' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="p-8 rounded-3xl bg-black/50 border border-white/10 backdrop-blur-xl shadow-2xl space-y-6 max-w-xl">
-            
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in fade-in duration-300">
+          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl glass-panel space-y-6">
             <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-              <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-glow-primary">
-                <Lock className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-2xl bg-theme-gold/15 border border-theme-gold/40 flex items-center justify-center text-theme-gold">
+                <Mail className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold font-darker-grotesque text-white">
-                  Modifier le Mot de Passe Administrateur
+                <h3 className="font-serif text-xl font-bold text-white">
+                  Inscription Email &amp; Mot de Passe
                 </h3>
                 <p className="text-xs text-theme-text-muted">
-                  Ce mot de passe protège l'accès à votre tableau de bord et à vos commandes.
+                  Associez votre email pour recevoir vos codes de réinitialisation en cas d&apos;oubli.
                 </p>
               </div>
             </div>
 
-            <form onSubmit={handleUpdatePassword} className="space-y-4">
-              
-              {/* Current Password */}
+            <form onSubmit={handleUpdateAccountSecurity} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">
-                  Mot de passe actuel :
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Adresse Email Administrateur (pour récupération) *
                 </label>
-                <div className="relative">
-                  <input
-                    type={showPasswords ? "text" : "password"}
-                    value={currentPasswordInput}
-                    onChange={e => setCurrentPasswordInput(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-theme-primary outline-none font-mono"
-                    placeholder="Saisissez votre mot de passe actuel"
-                    required
-                  />
-                </div>
+                <input
+                  type="email"
+                  value={adminEmailInput}
+                  onChange={(e) => setAdminEmailInput(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-theme-gold outline-none"
+                  placeholder="votre-email@exemple.com"
+                  required
+                />
               </div>
 
-              {/* New Password */}
               <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">
-                  Nouveau mot de passe :
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Mot de passe actuel *
                 </label>
-                <div className="relative">
+                <input
+                  type={showPasswords ? 'text' : 'password'}
+                  value={currentPasswordInput}
+                  onChange={(e) => setCurrentPasswordInput(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-theme-gold outline-none font-mono"
+                  placeholder="Mot de passe actuel (par défaut : admin)"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/10">
+                <div>
+                  <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                    Nouveau mot de passe (Optionnel)
+                  </label>
                   <input
-                    type={showPasswords ? "text" : "password"}
+                    type={showPasswords ? 'text' : 'password'}
                     value={newPasswordInput}
-                    onChange={e => setNewPasswordInput(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-theme-primary outline-none font-mono"
-                    placeholder="Au moins 4 caractères"
-                    required
+                    onChange={(e) => setNewPasswordInput(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-theme-gold outline-none font-mono"
+                    placeholder="Laisser vide pour garder"
                   />
                 </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="text-xs font-bold text-theme-text-muted block mb-1.5">
-                  Confirmer le nouveau mot de passe :
-                </label>
-                <div className="relative">
+                <div>
+                  <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                    Confirmer le nouveau mot de passe
+                  </label>
                   <input
-                    type={showPasswords ? "text" : "password"}
+                    type={showPasswords ? 'text' : 'password'}
                     value={confirmPasswordInput}
-                    onChange={e => setConfirmPasswordInput(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text focus:border-theme-primary outline-none font-mono"
-                    placeholder="Répétez le nouveau mot de passe"
-                    required
+                    onChange={(e) => setConfirmPasswordInput(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-theme-gold outline-none font-mono"
+                    placeholder="Répéter le mot de passe"
                   />
                 </div>
               </div>
 
-              {/* Toggle visibility */}
               <div className="flex items-center justify-between pt-1">
                 <button
                   type="button"
                   onClick={() => setShowPasswords(!showPasswords)}
                   className="flex items-center gap-1.5 text-xs text-theme-text-muted hover:text-white cursor-pointer"
                 >
-                  {showPasswords ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                  <span>{showPasswords ? 'Masquer' : 'Afficher'} les caractères</span>
+                  {showPasswords ? (
+                    <EyeOff className="w-3.5 h-3.5" />
+                  ) : (
+                    <Eye className="w-3.5 h-3.5" />
+                  )}
+                  <span>{showPasswords ? 'Masquer' : 'Afficher'} les mots de passe</span>
                 </button>
               </div>
 
-              {/* Error & Success alerts */}
               {passwordError && (
-                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-2 text-xs text-red-300 animate-in fade-in">
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-2 text-xs text-red-300">
                   <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
                   <span>{passwordError}</span>
                 </div>
               )}
 
               {passwordSuccess && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2 text-xs text-emerald-300 animate-in fade-in">
+                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2 text-xs text-emerald-300">
                   <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
                   <span>{passwordSuccess}</span>
                 </div>
@@ -554,16 +322,325 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-xl font-bold text-white shadow-glow-primary transition-all duration-300 hover:brightness-110 cursor-pointer text-sm bg-theme-primary mt-2"
+                className="w-full py-3.5 px-6 rounded-xl font-semibold text-white shadow-glow-primary transition-all duration-300 hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
               >
-                Mettre à jour le mot de passe
+                Enregistrer l&apos;Email &amp; le Mot de passe
               </button>
             </form>
+          </div>
 
+          {/* Right Column: Backup Recovery Key Card */}
+          <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl glass-panel space-y-5 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-theme-primary/15 border border-theme-primary/40 flex items-center justify-center text-theme-primary">
+                  <KeyRound className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif text-lg font-bold text-white">
+                    Clé de Secours Hors-Ligne
+                  </h4>
+                  <p className="text-xs text-theme-text-muted">
+                    Permet de réinitialiser votre mot de passe même sans réseau internet.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-black/50 border border-theme-gold/30 text-center space-y-2">
+                <span className="text-[10px] uppercase tracking-wider text-theme-text-muted block">
+                  Clé de récupération active
+                </span>
+                <div className="font-mono text-base font-bold text-theme-gold tracking-wider">
+                  {localSettings.adminRecoveryKey || 'Enregistrez votre email pour générer'}
+                </div>
+                {localSettings.adminRecoveryKey && (
+                  <div className="flex items-center justify-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigator.clipboard?.writeText(localSettings.adminRecoveryKey || '')
+                      }
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs text-white cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copier</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleRegenerateRecoveryKey}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-xs text-theme-text-muted hover:text-white cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Régénérer</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-theme-text-muted space-y-1.5">
+              <div className="font-semibold text-white flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-theme-gold" />
+                <span>Accès Administrateur Masqué</span>
+              </div>
+              <p className="leading-relaxed">
+                Le bouton Admin ne figure plus sur le footer public. Pour accéder à cet espace,
+                ajoutez simplement <code className="text-theme-gold font-mono">#admin</code> à
+                l&apos;adresse du site.
+              </p>
+            </div>
           </div>
         </div>
       )}
 
+      {/* TAB 2: Mobile Money Payments */}
+      {activeTab === 'payments' && (
+        <div className="space-y-6 animate-in fade-in duration-300">
+          {/* Orange Money */}
+          <div className="p-6 rounded-3xl bg-orange-500/10 border border-orange-500/30 space-y-4">
+            <div className="flex items-center gap-2 text-base font-bold text-orange-400">
+              <div className="w-3 h-3 rounded-full bg-orange-400" />
+              <span>Orange Money Mali</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Numéro Marchand :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.orange_money.number}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.orange_money.number = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-orange-400 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Nom du Titulaire :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.orange_money.name}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.orange_money.name = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-orange-400 outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Wave */}
+          <div className="p-6 rounded-3xl bg-sky-500/10 border border-sky-500/30 space-y-4">
+            <div className="flex items-center gap-2 text-base font-bold text-sky-400">
+              <div className="w-3 h-3 rounded-full bg-sky-400" />
+              <span>Wave Mali</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Numéro Wave :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.wave.number}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.wave.number = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-sky-400 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Nom du Titulaire :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.wave.name}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.wave.name = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-sky-400 outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Moov Money */}
+          <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 space-y-4">
+            <div className="flex items-center gap-2 text-base font-bold text-emerald-400">
+              <div className="w-3 h-3 rounded-full bg-emerald-400" />
+              <span>Moov Money Mali</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Numéro Moov :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.moov_money.number}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.moov_money.number = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-emerald-400 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted block mb-1.5">
+                  Nom du Titulaire :
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.merchantPhones.moov_money.name}
+                  onChange={(e) => {
+                    const updated = { ...localSettings };
+                    updated.merchantPhones.moov_money.name = e.target.value;
+                    setLocalSettings(updated);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-emerald-400 outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: Footer Links & Contact Info */}
+      {activeTab === 'footer' && (
+        <div className="space-y-6 animate-in fade-in duration-300">
+          <div className="p-6 rounded-3xl glass-panel space-y-6">
+            <h3 className="font-serif text-xl font-bold text-white flex items-center gap-2">
+              <Globe className="w-5 h-5 text-theme-gold" />
+              <span>Réseaux Sociaux &amp; Coordonnées du Footer</span>
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
+                  <span>Lien Instagram :</span>
+                </label>
+                <input
+                  type="url"
+                  value={localSettings.footerLinks?.instagram || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, instagram: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <Globe className="w-3.5 h-3.5 text-theme-gold" />
+                  <span>Lien TikTok :</span>
+                </label>
+                <input
+                  type="url"
+                  value={localSettings.footerLinks?.tiktok || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, tiktok: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Lien WhatsApp Direct :</span>
+                </label>
+                <input
+                  type="url"
+                  value={localSettings.footerLinks?.whatsapp || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, whatsapp: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <Globe className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Lien Facebook (Optionnel) :</span>
+                </label>
+                <input
+                  type="url"
+                  value={localSettings.footerLinks?.facebook || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, facebook: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-theme-primary" />
+                  <span>Adresse à Bamako :</span>
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.footerLinks?.address || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, address: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-theme-text-muted flex items-center gap-1.5 mb-1.5">
+                  <Phone className="w-3.5 h-3.5 text-theme-gold" />
+                  <span>Téléphone Client :</span>
+                </label>
+                <input
+                  type="text"
+                  value={localSettings.footerLinks?.phone || ''}
+                  onChange={(e) =>
+                    setLocalSettings({
+                      ...localSettings,
+                      footerLinks: { ...localSettings.footerLinks, phone: e.target.value }
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-theme-text focus:border-theme-gold outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pack, ThemeConfig } from '../../types';
-import { Eye, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { GlassCard } from '../ui/GlassCard';
+import { ArrowRight, Check, Sparkles, Award, Gift } from 'lucide-react';
+
 interface PackShowcaseProps {
   packs: Pack[];
   currentTheme: ThemeConfig;
@@ -13,145 +12,161 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
   packs,
   onSelectPack
 }) => {
-  const [activeModalPack, setActiveModalPack] = useState<Pack | null>(null);
+  const activePacks = packs.filter((p) => p.isActive);
+
+  const getPackBadgeIcon = (slug: Pack['slug']) => {
+    if (slug === 'premium') return <Award className="w-3.5 h-3.5 text-theme-gold" />;
+    if (slug === 'seasonal') return <Sparkles className="w-3.5 h-3.5 text-theme-primary" />;
+    return <Gift className="w-3.5 h-3.5 text-theme-gold" />;
+  };
 
   return (
-    <section id="packs-showcase" className="relative py-32 px-4 max-w-7xl mx-auto flex flex-col items-center pointer-events-none">
-      
-      <div className="text-center mb-20 pointer-events-auto">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-2xl sm:text-3xl md:text-4xl font-darker font-medium tracking-[0.1em] uppercase text-theme-text opacity-90"
-        >
-          Les Collections
-        </motion.h2>
+    <section
+      id="packs-showcase"
+      className="relative py-24 sm:py-32 px-4 max-w-7xl mx-auto flex flex-col items-center pointer-events-none"
+    >
+      {/* Section Heading */}
+      <div className="text-center max-w-2xl mx-auto mb-16 pointer-events-auto">
+        <h2 className="font-serif text-3xl sm:text-5xl font-semibold tracking-tight text-theme-text">
+          Les Coffrets de la Maison
+        </h2>
+        <p className="mt-4 text-sm sm:text-base text-theme-text-muted leading-relaxed">
+          Chaque écrin est préparé à la commande à Bamako, accompagné de ses attributs dorés et de sa
+          carte personnalisée scellée à la cire.
+        </p>
       </div>
 
-      <motion.div 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.2 } }
-        }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full max-w-6xl pointer-events-auto"
-      >
-        {packs.filter(p => p.isActive).map((pack) => {
+      {/* Detailed Cards Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full pointer-events-auto items-stretch">
+        {activePacks.map((pack) => {
+          const isFeatured = pack.slug === 'premium';
           return (
-            <GlassCard 
-              key={pack.id} 
-              variants={{
-                hidden: { opacity: 0, y: 40 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-              }}
-              className="group flex flex-col justify-between p-8 h-full"
-              glowColor="var(--theme-primary-glow)"
+            <article
+              key={pack.id}
+              className={`group relative rounded-3xl glass-panel flex flex-col justify-between overflow-hidden transition-all duration-500 hover:-translate-y-1.5 ${
+                isFeatured
+                  ? 'border-theme-gold/60 shadow-glow-gold ring-1 ring-theme-gold/30'
+                  : 'border-theme-border hover:border-theme-gold/50'
+              }`}
             >
-              
-              {/* Image Container with Fixed Uniform Aspect Ratio */}
-              <div className="mb-6 relative w-full aspect-[16/10] sm:aspect-[4/3] max-h-48 overflow-hidden rounded-xl border border-white/10 flex-shrink-0 bg-black/40">
-                <img
-                  src={pack.image}
-                  alt={pack.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80 group-hover:opacity-100"
-                />
+              <div>
+                {/* Image Header with Badge & Price Tag */}
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-black/50 border-b border-white/10">
+                  <img
+                    src={pack.image}
+                    alt={pack.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+
+                  {pack.badge && (
+                    <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-theme-gold/40 text-xs font-semibold text-theme-text">
+                      {getPackBadgeIcon(pack.slug)}
+                      <span>{pack.badge.replace(/^[^\wÀ-ÿ]+/, '').trim()}</span>
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between gap-2">
+                    <div>
+                      <p className="text-xs text-theme-gold font-medium tracking-wide">
+                        {pack.tagline}
+                      </p>
+                      <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white leading-tight">
+                        {pack.name}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Body Content */}
+                <div className="p-6 sm:p-7 space-y-6">
+                  {/* Price Banner */}
+                  <div className="flex items-baseline justify-between pb-4 border-b border-white/10">
+                    <div>
+                      <span className="text-xs uppercase tracking-wider text-theme-text-muted block">
+                        Tarif Tout Compris
+                      </span>
+                      <span className="text-[11px] text-emerald-400 font-medium">
+                        Livraison isotherme offerte à Bamako
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-mono text-2xl sm:text-3xl font-bold text-theme-gold">
+                        {pack.price.toLocaleString('fr-FR')}
+                      </span>
+                      <span className="text-xs font-mono text-theme-text-muted ml-1">FCFA</span>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-theme-text-muted leading-relaxed">
+                    {pack.description}
+                  </p>
+
+                  {/* Full Composition Directly Visible */}
+                  {pack.contents && pack.contents.length > 0 && (
+                    <div className="space-y-2.5">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-theme-gold">
+                        Composition de l&apos;Écrin ({pack.contents.length} créations)
+                      </h4>
+                      <ul className="space-y-2">
+                        {pack.contents.map((item, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-2.5 text-xs sm:text-[13px] text-theme-text/90 leading-snug"
+                          >
+                            <span className="w-4 h-4 rounded-full bg-theme-primary/20 border border-theme-primary/50 flex items-center justify-center flex-shrink-0 mt-0.5 text-theme-primary">
+                              <Check className="w-2.5 h-2.5" />
+                            </span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Key Signatures / Features */}
+                  {pack.features && pack.features.length > 0 && (
+                    <div className="pt-4 border-t border-white/10 space-y-2">
+                      <h4 className="text-[11px] font-semibold uppercase tracking-wider text-theme-text-muted">
+                        Attention &amp; Finitions
+                      </h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {pack.features.map((feat, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] text-theme-text-muted"
+                          >
+                            <Sparkles className="w-3 h-3 text-theme-gold flex-shrink-0" />
+                            <span>{feat}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Card Action Footer */}
+              <div className="p-6 sm:p-7 pt-0 mt-2">
                 <button
-                  onClick={() => setActiveModalPack(pack)}
-                  className="absolute bottom-3 right-3 p-2.5 rounded-full bg-black/60 hover:bg-theme-primary text-white transition-all cursor-pointer backdrop-blur-md border border-white/20"
-                  title="Voir les détails"
+                  type="button"
+                  onClick={() => onSelectPack(pack)}
+                  className={`w-full py-4 px-6 rounded-2xl font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer ${
+                    isFeatured
+                      ? 'bg-theme-primary text-white shadow-glow-primary hover:brightness-110'
+                      : 'bg-white/10 hover:bg-theme-primary text-white border border-white/15 hover:border-theme-primary'
+                  }`}
                 >
-                  <Eye className="w-4 h-4" />
+                  <span>Commander ce coffret</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-
-              {/* Text Container with Strictly Aligned Heights */}
-              <div className="flex-1 flex flex-col justify-start">
-                <h3 className="text-xl sm:text-2xl font-darker font-medium tracking-widest uppercase text-theme-text mb-2 min-h-[3.75rem] flex items-start line-clamp-2">
-                  {pack.name}
-                </h3>
-                <p className="text-sm font-mono text-theme-primary mb-4 font-bold tracking-wider">
-                  {pack.price.toLocaleString('fr-FR')} FCFA
-                </p>
-                <p className="text-xs text-theme-text-muted font-mono uppercase tracking-widest leading-relaxed mb-6 flex-1 min-h-[2.75rem] flex items-start line-clamp-2">
-                  {pack.tagline}
-                </p>
-              </div>
-
-              {/* Bottom Aligned Action Button */}
-              <button
-                onClick={() => onSelectPack(pack)}
-                className="mt-auto w-full flex items-center justify-center gap-4 py-4 rounded-none border border-theme-border/50 hover:border-theme-primary bg-transparent hover:bg-theme-primary/20 text-theme-text font-darker font-semibold tracking-widest uppercase transition-all duration-500 cursor-pointer text-sm"
-              >
-                <span>Commander</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              
-            </GlassCard>
+            </article>
           );
         })}
-      </motion.div>
-
-      <AnimatePresence>
-        {activeModalPack && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md pointer-events-auto"
-          >
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-lg border border-theme-primary/30 rounded-2xl bg-black/90 p-10 overflow-y-auto max-h-[90vh] shadow-[0_0_50px_rgba(0,0,0,0.8)]"
-            >
-              <button
-                onClick={() => setActiveModalPack(null)}
-                className="absolute top-6 right-6 text-theme-text-muted hover:text-white transition-colors cursor-pointer font-mono text-xl"
-              >
-                ✕
-              </button>
-
-              <h3 className="text-2xl sm:text-3xl font-darker font-medium tracking-widest uppercase text-white mb-2">
-                {activeModalPack.name}
-              </h3>
-              <p className="text-lg font-mono text-theme-primary mb-10">
-                {activeModalPack.price.toLocaleString('fr-FR')} FCFA
-              </p>
-
-              <div className="space-y-6 mb-12">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-theme-text-muted mb-4 font-mono">
-                  // Composition
-                </h4>
-                <ul className="space-y-3 font-mono text-xs uppercase tracking-widest text-theme-text-muted">
-                  {activeModalPack.contents.map((c, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="text-theme-primary opacity-50">+</span>
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <button
-                onClick={() => {
-                  onSelectPack(activeModalPack);
-                  setActiveModalPack(null);
-                }}
-                className="w-full flex items-center justify-center gap-4 py-4 rounded-none border border-theme-primary bg-theme-primary/10 text-theme-text font-darker font-semibold tracking-widest uppercase hover:bg-theme-primary hover:text-white transition-all duration-500 cursor-pointer text-sm shadow-glow-primary"
-              >
-                <span>Valider</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
     </section>
   );
 };

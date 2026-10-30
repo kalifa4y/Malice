@@ -25,30 +25,33 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Google Sans Flex"', '"Google Sans"', 'sans-serif'],
-        serif: ['"Darker Grotesque"', 'sans-serif'],
-        mono: ['"Google Sans Flex"', 'sans-serif'],
-        display: ['"Darker Grotesque"', 'sans-serif'],
-        heading: ['"Darker Grotesque"', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', '"Google Sans Flex"', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        heading: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        darker: ['"Cormorant Garamond"', '"Darker Grotesque"', 'serif'],
+        'darker-grotesque': ['"Cormorant Garamond"', '"Darker Grotesque"', 'serif'],
+        'google-sans': ['"Plus Jakarta Sans"', '"Google Sans Flex"', 'sans-serif'],
       },
       boxShadow: {
-        'glow-primary': '0 0 25px var(--theme-primary-glow)',
-        'glow-gold': '0 0 25px var(--theme-gold-glow)',
-        'card-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        'glow-primary': '0 10px 30px -6px var(--theme-primary-glow)',
+        'glow-gold': '0 10px 30px -6px var(--theme-gold-glow)',
+        'card-glass': '0 20px 50px -12px rgba(0, 0, 0, 0.65)',
       },
       animation: {
         'float-slow': 'float 6s ease-in-out infinite',
         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-        'spin-slow': 'spin 20s linear infinite',
+        'spin-slow': 'spin 24s linear infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-          '50%': { transform: 'translateY(-12px) rotate(2deg)' },
+          '50%': { transform: 'translateY(-10px) rotate(1.5deg)' },
         },
         pulseGlow: {
           '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-          '50%': { opacity: '1', transform: 'scale(1.05)' },
+          '50%': { opacity: '1', transform: 'scale(1.04)' },
         }
       }
     },

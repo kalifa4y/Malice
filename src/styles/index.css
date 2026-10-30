@@ -5,231 +5,139 @@
 @layer base {
   :root {
     /* Default theme: Cheshire Cat (Nocturne 00h-08h) */
-    --theme-bg: #090d16;
-    --theme-bg-translucent: rgba(9, 13, 22, 0.85);
-    --theme-surface: #131b2a;
-    --theme-surface-hover: #1b2538;
-    --theme-border: rgba(0, 242, 254, 0.2);
-    --theme-primary: #00f2fe;
+    --theme-bg: #070b14;
+    --theme-bg-translucent: rgba(7, 11, 20, 0.88);
+    --theme-surface: #101829;
+    --theme-surface-hover: #17223a;
+    --theme-border: rgba(212, 175, 55, 0.24);
+    --theme-primary: #00d4e6;
     --theme-primary-hover: #38f9d7;
-    --theme-primary-glow: rgba(0, 242, 254, 0.4);
-    --theme-accent: #8b5cf6;
-    --theme-gold: #f59e0b;
-    --theme-gold-glow: rgba(245, 158, 11, 0.4);
-    --theme-text: #f1f5f9;
-    --theme-text-muted: #94a3b8;
-    --theme-card: rgba(19, 27, 42, 0.7);
+    --theme-primary-glow: rgba(0, 212, 230, 0.35);
+    --theme-accent: #a78bfa;
+    --theme-gold: #e6be5a;
+    --theme-gold-glow: rgba(230, 190, 90, 0.35);
+    --theme-text: #f8fafc;
+    --theme-text-muted: #b0bfd4;
+    --theme-card: rgba(13, 20, 35, 0.82);
   }
 
   /* Theme 1: Cheshire Cat (Nocturne 00h00 - 08h00) */
   [data-theme="cheshire_night"] {
-    --theme-bg: #090d16;
-    --theme-bg-translucent: rgba(9, 13, 22, 0.88);
-    --theme-surface: #131b2a;
-    --theme-surface-hover: #1c273c;
-    --theme-border: rgba(0, 242, 254, 0.25);
-    --theme-primary: #00f2fe;
+    --theme-bg: #070b14;
+    --theme-bg-translucent: rgba(7, 11, 20, 0.88);
+    --theme-surface: #101829;
+    --theme-surface-hover: #17223a;
+    --theme-border: rgba(0, 212, 230, 0.24);
+    --theme-primary: #00d4e6;
     --theme-primary-hover: #38f9d7;
-    --theme-primary-glow: rgba(0, 242, 254, 0.45);
+    --theme-primary-glow: rgba(0, 212, 230, 0.35);
     --theme-accent: #a78bfa;
-    --theme-gold: #f59e0b;
-    --theme-gold-glow: rgba(245, 158, 11, 0.4);
-    --theme-text: #f1f5f9;
-    --theme-text-muted: #94a3b8;
-    --theme-card: rgba(19, 27, 42, 0.75);
+    --theme-gold: #e6be5a;
+    --theme-gold-glow: rgba(230, 190, 90, 0.35);
+    --theme-text: #f8fafc;
+    --theme-text-muted: #b0bfd4;
+    --theme-card: rgba(13, 20, 35, 0.82);
   }
 
   /* Theme 2: Mad Hatter (Diurne 08h00 - 16h00) */
   [data-theme="mad_hatter_day"] {
-    --theme-bg: #142012;
-    --theme-bg-translucent: rgba(20, 32, 18, 0.88);
-    --theme-surface: #1f331c;
-    --theme-surface-hover: #2a4426;
-    --theme-border: rgba(226, 88, 34, 0.3);
+    --theme-bg: #0d160c;
+    --theme-bg-translucent: rgba(13, 22, 12, 0.88);
+    --theme-surface: #162614;
+    --theme-surface-hover: #20361d;
+    --theme-border: rgba(212, 175, 55, 0.28);
     --theme-primary: #e25822;
     --theme-primary-hover: #ff7235;
-    --theme-primary-glow: rgba(226, 88, 34, 0.45);
+    --theme-primary-glow: rgba(226, 88, 34, 0.38);
     --theme-accent: #e06d63;
-    --theme-gold: #d4af37;
-    --theme-gold-glow: rgba(212, 175, 55, 0.4);
+    --theme-gold: #e5c158;
+    --theme-gold-glow: rgba(229, 193, 88, 0.38);
     --theme-text: #fdfbf7;
-    --theme-text-muted: #a3b899;
-    --theme-card: rgba(31, 51, 28, 0.75);
+    --theme-text-muted: #c2d1ba;
+    --theme-card: rgba(20, 34, 18, 0.82);
   }
 
   /* Theme 3: Queen of Hearts (Crépuscule 16h00 - 00h00) */
   [data-theme="queen_of_hearts_evening"] {
-    --theme-bg: #12080f;
-    --theme-bg-translucent: rgba(18, 8, 15, 0.88);
-    --theme-surface: #220e1d;
-    --theme-surface-hover: #31152a;
-    --theme-border: rgba(220, 20, 60, 0.3);
+    --theme-bg: #10060c;
+    --theme-bg-translucent: rgba(16, 6, 12, 0.88);
+    --theme-surface: #1e0b18;
+    --theme-surface-hover: #2b1123;
+    --theme-border: rgba(220, 20, 60, 0.28);
     --theme-primary: #dc143c;
     --theme-primary-hover: #f42c54;
-    --theme-primary-glow: rgba(220, 20, 60, 0.45);
+    --theme-primary-glow: rgba(220, 20, 60, 0.4);
     --theme-accent: #4fc3f7;
-    --theme-gold: #ffd700;
-    --theme-gold-glow: rgba(255, 215, 0, 0.4);
+    --theme-gold: #f0c954;
+    --theme-gold-glow: rgba(240, 201, 84, 0.38);
     --theme-text: #fff9fa;
-    --theme-text-muted: #b899a8;
-    --theme-card: rgba(34, 14, 29, 0.75);
+    --theme-text-muted: #d1b4c2;
+    --theme-card: rgba(26, 10, 21, 0.82);
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     background-color: var(--theme-bg);
     color: var(--theme-text);
-    font-family: 'Google Sans Flex', sans-serif;
-    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1), color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  body::before {
-    content: "";
-    position: fixed;
-    inset: -50%;
-    width: 200vw;
-    height: 200vh;
-    z-index: 9999;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.07;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Darker Grotesque', sans-serif;
+  h1, h2, h3, h4, .font-editorial {
+    font-family: 'Cormorant Garamond', Georgia, serif;
   }
 }
 
-/* User font definitions */
-.font-darker {
-  font-family: 'Darker Grotesque', sans-serif;
+.font-darker,
+.font-darker-grotesque,
+.font-metroway,
+.font-neogen,
+.font-perfect-girl {
+  font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
-.font-google-sans {
-  font-family: 'Google Sans Flex', sans-serif;
+.font-google-sans,
+.font-manrope,
+.font-figtree {
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.font-metroway, .font-neogen, .font-perfect-girl {
-  font-family: 'Darker Grotesque', sans-serif;
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
-.font-manrope, .font-figtree, .font-mono {
-  font-family: 'Google Sans Flex', sans-serif;
-}
-
-/* Oryzo-Inspired Editorial & Technical Tokens */
-.o-dashline {
-  width: 100%;
-  border-bottom: 1px dashed var(--theme-border);
-  margin: 1.25rem 0;
-  opacity: 0.7;
-}
-
-.o-badge-tech {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: 'Google Sans Flex', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  background: var(--theme-surface);
-  border: 1px solid var(--theme-border);
-  color: var(--theme-primary);
-}
-
-.sub1 {
-  font-family: 'Darker Grotesque', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--theme-text);
-}
-
-.sub2 {
-  font-family: 'Google Sans Flex', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--theme-text-muted);
-}
-
-.body1 {
-  font-family: 'Google Sans Flex', sans-serif;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--theme-text-muted);
-}
-
-.body2 {
-  font-family: 'Google Sans Flex', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--theme-text-muted);
-}
-
-.quote-highlight {
-  color: var(--theme-primary);
-  font-weight: 700;
-}
-
-/* Bento Box & Glass Cards */
+/* Luxury Surfaces & Cards */
 .glass-panel {
   background: var(--theme-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--theme-border);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--theme-border);
 }
 
-.bento-card {
-  background: var(--theme-card);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--theme-border);
-  border-radius: 1.5rem;
-  padding: 1.75rem;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.bento-card:hover {
-  border-color: var(--theme-primary);
-  box-shadow: 0 12px 36px -8px var(--theme-primary-glow);
-  transform: translateY(-3px);
-}
-
-/* Flip Card 3D Perspective */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.transform-style-preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-  transform: rotateY(180deg);
+.luxury-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--theme-gold), transparent);
+  opacity: 0.35;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--theme-bg);
@@ -241,13 +149,4 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--theme-primary);
-}
-
-/* Shimmer and Glow Utilities */
-.text-glow {
-  text-shadow: 0 0 24px var(--theme-primary-glow);
-}
-
-.text-gold-glow {
-  text-shadow: 0 0 20px var(--theme-gold-glow);
 }

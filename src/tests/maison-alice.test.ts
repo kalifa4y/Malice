@@ -1,11 +1,20 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { generateOrderNumber, generateWhatsAppOrderUrl } from '../lib/whatsapp';
 import { localDB } from '../lib/supabase';
+import {
+  registerAdminAccount,
+  createPasswordResetOtp,
+  verifyPasswordResetOtp,
+  generateBackupRecoveryKey
+} from '../lib/adminAuth';
 import { Order } from '../types';
 import { THEMES, BAMAKO_DELIVERY_ZONES } from '../lib/constants';
 
-describe('Maison Alice — Business Logic & Verification Tests', () => {
+describe('Maison Alice — Business Logic, Admin Email Recovery & Verification Tests', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
 
   describe('1. Order Number & WhatsApp Contract Tests', () => {
     it('generates compliant order numbers in format #MA-2026-XXXX', () => {
@@ -25,8 +34,8 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
         deliveryZoneId: 'zone-1',
         deliveryZoneName: 'ACI 2000 / Hamdallaye',
         deliveryAddress: 'Rue 312, Porte 45',
-        deliveryFee: 1500,
-        totalAmount: 16500,
+        deliveryFee: 0,
+        totalAmount: 15000,
         paymentMethod: 'orange_money',
         status: 'pending_payment',
         createdAt: new Date().toISOString()
@@ -42,15 +51,15 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
   describe('2. Bamako Delivery Zones & Fee Accuracy', () => {
     it('contains all 8 required communes/districts across Rive Gauche and Rive Droite', () => {
       expect(BAMAKO_DELIVERY_ZONES.length).toBeGreaterThanOrEqual(8);
-      const riveGaucheZones = BAMAKO_DELIVERY_ZONES.filter(z => z.riverSide === 'rive_gauche');
-      const riveDroiteZones = BAMAKO_DELIVERY_ZONES.filter(z => z.riverSide === 'rive_droite');
-      
+      const riveGaucheZones = BAMAKO_DELIVERY_ZONES.filter((z) => z.riverSide === 'rive_gauche');
+      const riveDroiteZones = BAMAKO_DELIVERY_ZONES.filter((z) => z.riverSide === 'rive_droite');
+
       expect(riveGaucheZones.length).toBeGreaterThan(0);
       expect(riveDroiteZones.length).toBeGreaterThan(0);
     });
 
     it('ensures delivery fees are strictly positive and within valid ranges (1500 - 3500 FCFA)', () => {
-      BAMAKO_DELIVERY_ZONES.forEach(z => {
+      BAMAKO_DELIVERY_ZONES.forEach((z) => {
         expect(z.fee).toBeGreaterThanOrEqual(1500);
         expect(z.fee).toBeLessThanOrEqual(5000);
         expect(z.isActive).toBe(true);
@@ -79,7 +88,6 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
 
   describe('4. Store Database & Order Lifecycle', () => {
     it('initializes with an empty order list without hardcoded mock orders', () => {
-      localStorage.clear();
       const initialOrders = localDB.getOrders();
       expect(initialOrders).toEqual([]);
     });
@@ -96,8 +104,8 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
         deliveryZoneId: 'zone-4',
         deliveryZoneName: 'Bacodjicoroni',
         deliveryAddress: 'Face pharmacie',
-        deliveryFee: 2000,
-        totalAmount: 27000,
+        deliveryFee: 0,
+        totalAmount: 25000,
         paymentMethod: 'wave',
         status: 'pending_payment',
         createdAt: new Date().toISOString()
@@ -105,11 +113,10 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
 
       localDB.saveOrder(newOrder);
       const ordersAfterSave = localDB.getOrders();
-      expect(ordersAfterSave.some(o => o.id === 'ord-test-lifecycle')).toBe(true);
+      expect(ordersAfterSave.some((o) => o.id === 'ord-test-lifecycle')).toBe(true);
 
-      // Update status to confirmed
       localDB.updateOrderStatus('ord-test-lifecycle', 'confirmed');
-      const updatedOrder = localDB.getOrders().find(o => o.id === 'ord-test-lifecycle');
+      const updatedOrder = localDB.getOrders().find((o) => o.id === 'ord-test-lifecycle');
       expect(updatedOrder?.status).toBe('confirmed');
     });
 
@@ -121,7 +128,9 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
 
       localDB.savePacks([customPack]);
       const retrievedPacks = localDB.getPacks();
-      expect(retrievedPacks[0].image).toBe('data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoBAAEAAkA4JaQAA3AA/vuUAAA=');
+      expect(retrievedPacks[0].image).toBe(
+        'data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoBAAEAAkA4JaQAA3AA/vuUAAA='
+      );
     });
 
     it('persists customized admin password and footer links in store settings', () => {
@@ -147,4 +156,43 @@ describe('Maison Alice — Business Logic & Verification Tests', () => {
     });
   });
 
+  describe('5. Admin Email Registration & Password Recovery Flow', () => {
+    it('registers an admin email, password, and backup recovery key', () => {
+      const { settings, recoveryKey } = registerAdminAccount(
+        'Admin@MaisonAlice.com',
+        'secretBamako2026'
+      );
+
+      expect(settings.adminEmail).toBe('admin@maisonalice.com');
+      expect(settings.adminPassword).toBe('secretBamako2026');
+      expect(settings.isAdminRegistered).toBe(true);
+      expect(recoveryKey).toMatch(/^ALICE-[A-Z0-9]{4}-[A-Z0-9]{4}$/);
+      expect(localDB.getSettings().adminEmail).toBe('admin@maisonalice.com');
+    });
+
+    it('creates and verifies a 6-digit password reset OTP for the registered email', () => {
+      const email = 'admin@maisonalice.com';
+      const otp = createPasswordResetOtp(email);
+      expect(otp).toMatch(/^\d{6}$/);
+
+      // Rejects wrong code
+      const wrongAttempt = verifyPasswordResetOtp(email, '000000');
+      if (otp !== '000000') {
+        expect(wrongAttempt.valid).toBe(false);
+      }
+
+      // Accepts valid code
+      const validAttempt = verifyPasswordResetOtp(email, otp);
+      expect(validAttempt.valid).toBe(true);
+
+      // Single-use OTP: cannot be reused after verification
+      const replayAttempt = verifyPasswordResetOtp(email, otp);
+      expect(replayAttempt.valid).toBe(false);
+    });
+
+    it('generates formatted backup recovery keys', () => {
+      const key = generateBackupRecoveryKey();
+      expect(key).toMatch(/^ALICE-[A-Z0-9]{4}-[A-Z0-9]{4}$/);
+    });
+  });
 });

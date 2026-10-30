@@ -1,19 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useTimeTheme } from './hooks/useTimeTheme';
 import { localDB } from './lib/supabase';
-import { Pack, Order, DeliveryZone, StoreSettings } from './types';
+import { Pack, DeliveryZone, StoreSettings } from './types';
 import { Confectionery3DScene } from './components/3d/Confectionery3DScene';
 import { LuxuryHeader } from './components/ui/LuxuryHeader';
 import { HeroSection } from './components/sections/HeroSection';
 import { PackShowcase } from './components/sections/PackShowcase';
 import { HowItWorksSection } from './components/sections/HowItWorksSection';
 import { BamakoDeliveryPaymentSection } from './components/sections/BamakoDeliveryPaymentSection';
+import { DeliveryFaqSection } from './components/sections/DeliveryFaqSection';
 import { Footer } from './components/sections/Footer';
 import { OrderDrawer } from './components/order/OrderDrawer';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 
 export function App() {
-  const { currentTheme } = useTimeTheme();
+  const {
+    currentTheme,
+    currentPeriod,
+    isManualOverride,
+    currentTimeFormatted,
+    setManualTheme,
+    resetToRealTime,
+    allThemes
+  } = useTimeTheme();
 
   const [currentView, setCurrentView] = useState<'store' | 'admin'>(() => {
     return window.location.hash === '#admin' ? 'admin' : 'store';
@@ -26,7 +35,7 @@ export function App() {
   const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
   const [selectedPackForOrder, setSelectedPackForOrder] = useState<Pack | null>(null);
 
-  // Sync hash changes
+  // Sync URL hash changes (#admin exclusively)
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#admin') {
@@ -61,14 +70,8 @@ export function App() {
     }
   };
 
-  const navigateToAdmin = () => {
-    window.location.hash = '#admin';
-    setCurrentView('admin');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const navigateToStore = () => {
-    window.location.hash = '';
+    window.history.pushState('', document.title, window.location.pathname + window.location.search);
     setCurrentView('store');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -84,49 +87,53 @@ export function App() {
   }
 
   return (
-    <div className="relative min-h-screen selection:bg-theme-primary selection:text-white font-google-sans text-theme-text overflow-x-hidden">
-      {/* 3D WebGL Photorealistic Confectionery Parallax Scene */}
-      <Confectionery3DScene />
+    <div className="relative min-h-screen selection:bg-theme-primary selection:text-white font-sans text-theme-text overflow-x-hidden">
+      {/* 3D WebGL Haute Confiserie & Wonderland Scene (Three.js + Anime.js) */}
+      <Confectionery3DScene currentTheme={currentTheme} />
 
-      {/* Minimalist Floating Luxury Header */}
+      {/* Floating Luxury Header with "Les 3 Heures d'Alice" Theme Switcher */}
       <LuxuryHeader
         onOpenOrder={() => handleOpenOrder()}
+        currentTheme={currentTheme}
+        allThemes={allThemes}
+        currentPeriod={currentPeriod}
+        isManualOverride={isManualOverride}
+        currentTimeFormatted={currentTimeFormatted}
+        onSelectTheme={setManualTheme}
+        onResetToRealTime={resetToRealTime}
       />
 
-      {/* Main Streamlined Content Sections */}
+      {/* Main Editorial Content Sections */}
       <main className="relative z-10">
-        {/* 1. Hero Section with Original Transparent Logo */}
+        {/* 1. Hero Section */}
         <HeroSection
           onOpenOrder={() => handleOpenOrder()}
           onExplorePacks={handleExplorePacks}
+          currentTheme={currentTheme}
+          siteNotice={settings.siteNotice}
         />
 
-        {/* 2. Collections Showcase (Normal 15k, Premium 25k, Seasonal 20k) */}
+        {/* 2. Detailed Collections Showcase */}
         <PackShowcase
           packs={packs}
           currentTheme={currentTheme}
           onSelectPack={(pack) => handleOpenOrder(pack)}
         />
 
-        {/* 3. Comment ça marche (3 étapes claires) */}
-        <HowItWorksSection
-          onOpenOrder={() => handleOpenOrder()}
-        />
+        {/* 3. The 3-Step Ordering Ritual */}
+        <HowItWorksSection onOpenOrder={() => handleOpenOrder()} />
 
-        {/* 4. Logistique & Paiements Mobiles Bamako */}
-        <BamakoDeliveryPaymentSection
-          onOpenOrder={() => handleOpenOrder()}
-        />
+        {/* 4. Free Bamako Insulated Delivery & Mobile Money Payments */}
+        <BamakoDeliveryPaymentSection onOpenOrder={() => handleOpenOrder()} />
+
+        {/* 5. FAQ & Guarantees */}
+        <DeliveryFaqSection currentTheme={currentTheme} />
       </main>
 
-      {/* Luxury Footer with Official Logo & Admin Access */}
-      <Footer
-        currentTheme={currentTheme}
-        settings={settings}
-        onOpenAdmin={navigateToAdmin}
-      />
+      {/* Luxury Footer (without public Admin button) */}
+      <Footer currentTheme={currentTheme} settings={settings} />
 
-      {/* Slide-in Order Drawer with Bamako Shipping & WhatsApp Confirmation */}
+      {/* Slide-in Order Drawer with Flexible Bamako Address + Optional GPS & WhatsApp Confirmation */}
       <OrderDrawer
         isOpen={isOrderDrawerOpen}
         onClose={() => setIsOrderDrawerOpen(false)}
@@ -135,12 +142,12 @@ export function App() {
         zones={zones}
         settings={settings}
         currentTheme={currentTheme}
-        onOrderCreated={(order: Order) => {
-          console.log('Nouvelle commande créée :', order);
+        onOrderCreated={() => {
           refreshData();
         }}
       />
     </div>
   );
 }
+
 export default App;

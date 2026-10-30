@@ -36,12 +36,12 @@ export interface ThemeConfig {
 
 export type PaymentMethod = 'orange_money' | 'wave' | 'moov_money';
 
-export type OrderStatus = 
-  | 'pending_payment' 
-  | 'confirmed' 
-  | 'preparing' 
-  | 'shipping' 
-  | 'delivered' 
+export type OrderStatus =
+  | 'pending_payment'
+  | 'confirmed'
+  | 'preparing'
+  | 'shipping'
+  | 'delivered'
   | 'cancelled';
 
 export interface Pack {
@@ -72,6 +72,9 @@ export interface Order {
   orderNumber: string;
   customerName: string;
   customerPhone: string;
+  isGift?: boolean;
+  recipientName?: string;
+  recipientPhone?: string;
   packId: string;
   packName: string;
   packPrice: number;
@@ -106,6 +109,9 @@ export interface StoreSettings {
   whatsappNotificationNumber: string;
   siteNotice?: string;
   currency: string;
+  adminEmail?: string;
   adminPassword?: string;
+  adminRecoveryKey?: string;
+  isAdminRegistered?: boolean;
   footerLinks?: FooterLinks;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'hero';
@@ -13,6 +13,9 @@ export const Logo: React.FC<LogoProps> = ({
   className = '',
   onClick
 }) => {
+  const clickCountRef = useRef(0);
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const sizeMap = {
     xs: 'w-20 sm:w-24',
     sm: 'w-32 sm:w-40',
@@ -22,10 +25,32 @@ export const Logo: React.FC<LogoProps> = ({
     hero: 'w-full max-w-[290px] sm:max-w-[380px] md:max-w-[450px]'
   };
 
+  const handleLogoClick = () => {
+    clickCountRef.current += 1;
+
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+    }
+
+    if (clickCountRef.current >= 5) {
+      clickCountRef.current = 0;
+      window.location.hash = '#admin';
+      return;
+    }
+
+    resetTimerRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+    }, 1800);
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
-      className={`inline-flex items-center justify-center select-none ${sizeMap[size]} ${className}`}
-      onClick={onClick}
+      className={`inline-flex items-center justify-center select-none cursor-pointer ${sizeMap[size]} ${className}`}
+      onClick={handleLogoClick}
     >
       <picture className="w-full h-auto">
         <source srcSet="/assets/maison-alice-logo-transparent.webp" type="image/webp" />

@@ -51,7 +51,8 @@
 * Mention épurée **Maison Alice** (sans mention *SARL* ni *Bamako*).
 * **Icônes officielles Font Awesome Brands** en SVG (*Instagram*, *TikTok*, *Facebook*) et bouton **WhatsApp Direct** (`+223 71 03 96 47`).
 
-### 7. Espace d'Administration Épuré (`#admin`)
+### 7. Espace d'Administration Épuré (`#admin` ou 5 clics rapides sur le Logo)
+* **Accès intuitif caché** : effectuez **5 clics rapides sur le logo Maison Alice** (en haut ou dans le pied de page) pour ouvrir l'espace d'administration sans modifier l'URL.
 * Réduction de **-70 % des textes** pour une interface de gestion rapide et directe :
   * **Commandes** : indicateurs clés (*Revenus, Commandes, À payer, En route*), recherche instantanée et filtres en français (*Toutes, À payer, Payées, En route, Livrées*).
   * **Coffrets** : modification en 3 étapes avec compression d'image WebP automatique côté navigateur.

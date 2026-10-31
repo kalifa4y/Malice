@@ -58,8 +58,7 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left max-w-xl space-y-4">
             <Logo
               size="xl"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="cursor-pointer hover:scale-[1.02] transition-transform duration-300 -ml-2"
+              className="hover:scale-[1.02] transition-transform duration-300 -ml-2"
             />
             <p className="text-xs sm:text-sm text-theme-text-muted leading-relaxed">
               Maison de chocolats fins et de coffrets cadeaux gourmands inspirés de l&apos;univers

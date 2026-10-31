@@ -289,7 +289,7 @@ export const Confectionery3DScene: React.FC<Confectionery3DSceneProps> = ({ curr
         // Brand signature on dial
         ctx.fillStyle = '#8b6508';
         ctx.font = 'italic bold 18px Georgia, serif';
-        ctx.fillText('UNDERLAND • 10/6', 256, 195);
+        ctx.fillText('MERVEILLES', 256, 195);
         ctx.font = '13px Georgia, serif';
         ctx.fillText('MAISON ALICE', 256, 325);
       }

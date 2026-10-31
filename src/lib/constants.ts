@@ -3,9 +3,9 @@ import { ThemeConfig, Pack, DeliveryZone, StoreSettings } from '../types';
 export const THEMES: Record<string, ThemeConfig> = {
   mad_hatter_day: {
     id: 'mad_hatter_day',
-    name: 'Royaume de Marmoreal',
-    subName: 'Le Monde Éveillé • Reine Blanche',
-    character: 'Marmoreal • Monde Éveillé',
+    name: 'Royaume Blanc',
+    subName: 'Jour • Reine Blanche',
+    character: 'Royaume Blanc',
     timeRange: '08h00 — 16h00',
     startHour: 8,
     endHour: 16,
@@ -34,9 +34,9 @@ export const THEMES: Record<string, ThemeConfig> = {
   },
   cheshire_night: {
     id: 'cheshire_night',
-    name: 'Bois de Tulgey • 10/6',
-    subName: 'Le Monde de la Nuit • Chapelier Fou',
-    character: 'Bois de Tulgey • Nuit 10/6',
+    name: 'Chapelier Fou',
+    subName: 'Nuit • Salon du Chapelier',
+    character: 'Chapelier Fou',
     timeRange: '00h00 — 08h00',
     startHour: 0,
     endHour: 8,
@@ -65,9 +65,9 @@ export const THEMES: Record<string, ThemeConfig> = {
   },
   queen_of_hearts_evening: {
     id: 'queen_of_hearts_evening',
-    name: 'Cour de Salazen Grum',
-    subName: 'Le Royaume Écarlate • Reine Rouge',
-    character: 'Salazen Grum • Cour Rouge',
+    name: 'Reine de Cœur',
+    subName: 'Soir • Cour Royale',
+    character: 'Reine de Cœur',
     timeRange: '16h00 — 00h00',
     startHour: 16,
     endHour: 24,
@@ -100,69 +100,69 @@ export const INITIAL_PACKS: Pack[] = [
   {
     id: 'pack-normal',
     slug: 'normal',
-    name: "L'Écrin de Marmoreal",
-    tagline: 'Royaume Blanc • 5 Créations',
-    description: 'Sablés « Mange-Moi », chocolats 70% et Clé d’Or d’Underland.',
+    name: "Le Coffret d'Alice",
+    tagline: 'Douceurs & Chocolats • 5 Créations',
+    description: 'Biscuits sablés « Mange-Moi », chocolats noirs 70% et petite clé dorée.',
     price: 15000,
-    badge: 'Marmoreal',
+    badge: 'Classique',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Sablés « Mange-Moi » (150g)',
-      'Dragées Chocolat 70% (120g)',
-      'Perles Fruits Exotiques (100g)',
-      "Clé d'Or d'Underland",
-      'Carte Scellée à la Cire'
+      'Biscuits sablés « Mange-Moi » (150g)',
+      'Chocolats noirs 70% (120g)',
+      'Bonbons aux fruits (100g)',
+      'Petite clé dorée',
+      'Carte cadeau scellée'
     ],
     features: [
-      'Tenue Tropicale',
-      'Livraison Offerte'
+      'Résiste à la chaleur',
+      'Livraison gratuite'
     ]
   },
   {
     id: 'pack-premium',
     slug: 'premium',
-    name: 'Le Banquet 10/6 du Chapelier',
-    tagline: 'Table de Tarrant • 7 Créations',
-    description: 'Pralinés, calissons, Fiole « Bois-Moi » et Montre Chronosphère.',
+    name: 'Le Coffret du Chapelier',
+    tagline: 'Grand Coffret Prestige • 7 Créations',
+    description: 'Chocolats pralinés, calissons, fiole sucrée « Bois-Moi » et montre dorée.',
     price: 25000,
-    badge: 'Signature 10/6',
+    badge: 'Prestige',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Pralinés & Ganaches (250g)',
-      'Calissons aux Amandes (150g)',
-      'Nougat Miel & Pistache (120g)',
-      'Fiole « Bois-Moi » Sucrée',
-      'Montre Or Chronosphère',
-      'Carte Officielle 10/6',
-      'Grand Coffret Doré à Chaud'
+      'Chocolats pralinés & ganaches (250g)',
+      'Calissons aux amandes (150g)',
+      'Nougat miel & pistache (120g)',
+      'Fiole sucrée « Bois-Moi »',
+      'Montre gousset dorée',
+      'Carte cadeau dorée',
+      'Grand coffret doré'
     ],
     features: [
-      'Coffret Prestige',
-      'Livraison VIP Offerte'
+      'Grand coffret cadeau',
+      'Livraison gratuite'
     ]
   },
   {
     id: 'pack-seasonal',
     slug: 'seasonal',
-    name: 'Le Décret de Salazen Grum',
-    tagline: 'Cour Écarlate • 5 Créations',
-    description: 'Cœurs rubis, truffes grand cru et Roses Blanches Peintes.',
+    name: 'Le Coffret de la Reine',
+    tagline: 'Édition Limitée • 5 Créations',
+    description: 'Cœurs en chocolat rouge, truffes cacao et guimauves à la rose.',
     price: 20000,
-    badge: 'Cour Rouge',
+    badge: 'Série Limitée',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Cœurs Glaçage Rubis (180g)',
-      'Guimauves Roses Peintes (100g)',
-      'Truffes Cacao Noir (120g)',
-      'Carte Soldat Dorée',
-      'Sceau de Cire Rouge Sang'
+      'Cœurs en chocolat rouge (180g)',
+      'Guimauves à la rose (100g)',
+      'Truffes au cacao noir (120g)',
+      'Carte Royale dorée',
+      'Sceau de cire rouge'
     ],
     features: [
-      'Série Limitée',
-      'Livraison Offerte'
+      'Série limitée',
+      'Livraison gratuite'
     ]
   }
 ];

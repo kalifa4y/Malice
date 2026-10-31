@@ -16,11 +16,7 @@ export function App() {
   const {
     currentTheme,
     currentPeriod,
-    isManualOverride,
-    currentTimeFormatted,
-    setManualTheme,
-    resetToRealTime,
-    allThemes
+    currentTimeFormatted
   } = useTimeTheme();
 
   const [currentView, setCurrentView] = useState<'store' | 'admin'>(() => {
@@ -34,7 +30,6 @@ export function App() {
   const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
   const [selectedPackForOrder, setSelectedPackForOrder] = useState<Pack | null>(null);
 
-  // Sync URL hash changes (#admin exclusively)
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#admin') {
@@ -87,51 +82,34 @@ export function App() {
 
   return (
     <div className="relative min-h-screen selection:bg-theme-primary selection:text-white font-sans text-theme-text overflow-x-hidden">
-      {/* 3D WebGL Underland & Haute Confiserie Scene (Three.js + Anime.js) */}
       <Confectionery3DScene currentTheme={currentTheme} />
 
-      {/* Floating Luxury Header with "Les 3 Royaumes d'Underland" Switcher */}
       <LuxuryHeader
         onOpenOrder={() => handleOpenOrder()}
         currentTheme={currentTheme}
-        allThemes={allThemes}
         currentPeriod={currentPeriod}
-        isManualOverride={isManualOverride}
         currentTimeFormatted={currentTimeFormatted}
-        onSelectTheme={setManualTheme}
-        onResetToRealTime={resetToRealTime}
       />
 
-      {/* Main Distilled Content Sections */}
       <main className="relative z-10">
-        {/* 1. Hero Section */}
         <HeroSection
           onOpenOrder={() => handleOpenOrder()}
           onExplorePacks={handleExplorePacks}
-          currentTheme={currentTheme}
-          allThemes={allThemes}
-          onSelectTheme={setManualTheme}
-          siteNotice={settings.siteNotice}
         />
 
-        {/* 2. Illustrated Underland Collections Showcase */}
         <PackShowcase
           packs={packs}
           currentTheme={currentTheme}
           onSelectPack={(pack) => handleOpenOrder(pack)}
         />
 
-        {/* 3. Illustrated 3-Step Ordering Ritual */}
         <HowItWorksSection onOpenOrder={() => handleOpenOrder()} />
 
-        {/* 4. Compact Free Bamako Delivery & Mobile Money Strip */}
         <BamakoDeliveryPaymentSection onOpenOrder={() => handleOpenOrder()} />
       </main>
 
-      {/* Luxury Footer (without public Admin button) */}
       <Footer currentTheme={currentTheme} settings={settings} />
 
-      {/* Slide-in Order Drawer with Flexible Bamako Address + Optional GPS & WhatsApp Confirmation */}
       <OrderDrawer
         isOpen={isOrderDrawerOpen}
         onClose={() => setIsOrderDrawerOpen(false)}

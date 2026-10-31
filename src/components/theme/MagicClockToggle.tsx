@@ -1,196 +1,168 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { ThemeConfig, ThemePeriod } from '../../types';
-import { Compass, RotateCcw, ChevronDown, Check } from 'lucide-react';
 
 interface MagicClockToggleProps {
   currentTheme: ThemeConfig;
-  allThemes: ThemeConfig[];
   currentPeriod: ThemePeriod;
-  isManualOverride: boolean;
   currentTimeFormatted: string;
-  onSelectTheme: (period: ThemePeriod) => void;
-  onResetToRealTime: () => void;
 }
 
-const RealmEmblem: React.FC<{ realmId: ThemePeriod; className?: string }> = ({
-  realmId,
-  className = 'w-3.5 h-3.5'
-}) => {
-  switch (realmId) {
-    case 'cheshire_night':
-      // Tarrant Hightopp 10/6 Top Hat Emblem (Bois de Tulgey)
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-          <path d="M4 19h16" strokeLinecap="round" />
-          <path d="M6.5 19L5 7c2.5-1.5 11.5-1.5 14 0l-1.5 12" strokeLinejoin="round" />
-          <path d="M6.2 15h11.6" strokeLinecap="round" />
-        </svg>
-      );
-    case 'mad_hatter_day':
-      // White Queen Crown of Marmoreal Emblem (Monde Éveillé)
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-          <path d="M3 18h18M4 15l2-9 6 5 6-5 2 9H4z" strokeLinejoin="round" />
-        </svg>
-      );
-    case 'queen_of_hearts_evening':
-    default:
-      // Royal Heart of Salazen Grum (Cour Écarlate)
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </svg>
-      );
+const REALM_POINTS: {
+  id: ThemePeriod;
+  label: string;
+  cx: number;
+  cy: number;
+  color: string;
+  angle: number;
+}[] = [
+  {
+    id: 'mad_hatter_day',
+    label: 'Royaume Blanc (08h-16h)',
+    cx: 16,
+    cy: 4.2,
+    color: '#d93870',
+    angle: 0
+  },
+  {
+    id: 'queen_of_hearts_evening',
+    label: 'Reine de Cœur (16h-00h)',
+    cx: 26.2,
+    cy: 21.9,
+    color: '#dc1e35',
+    angle: 120
+  },
+  {
+    id: 'cheshire_night',
+    label: 'Chapelier Fou (00h-08h)',
+    cx: 5.8,
+    cy: 21.9,
+    color: '#18b8a6',
+    angle: 240
   }
-};
+];
 
 export const MagicClockToggle: React.FC<MagicClockToggleProps> = ({
   currentTheme,
-  allThemes,
-  isManualOverride,
-  currentTimeFormatted,
-  onSelectTheme,
-  onResetToRealTime
+  currentPeriod,
+  currentTimeFormatted
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const activePoint =
+    REALM_POINTS.find((pt) => pt.id === currentPeriod) || REALM_POINTS[0];
 
   return (
-    <div ref={dropdownRef} className="relative z-50">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        aria-label="Voyager entre les 3 Royaumes d'Underland"
-        className="group flex items-center gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full glass-panel hover:border-theme-gold/60 transition-all duration-300 text-xs cursor-pointer"
-      >
-        <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border border-theme-gold/40 bg-black/40 text-theme-gold flex-shrink-0">
-          <RealmEmblem realmId={currentTheme.id} className="w-3.5 h-3.5" />
+    <div
+      role="status"
+      aria-label={`Horloge automatique des 3 royaumes : ${currentTheme.name} (${currentTimeFormatted})`}
+      title={`Changement automatique selon l'heure • ${currentTheme.name} (${currentTheme.timeRange})`}
+      className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-full glass-panel border border-theme-gold/35 select-none"
+    >
+      {/* Petite horloge tournant autour des 3 points (les 3 royaumes) */}
+      <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0">
+        <svg
+          viewBox="0 0 32 32"
+          className="w-full h-full overflow-visible"
+          fill="none"
+          aria-hidden="true"
+        >
+          {/* Cercle d'orbite reliant les 3 points des royaumes */}
+          <circle
+            cx="16"
+            cy="16"
+            r="11.8"
+            stroke="currentColor"
+            strokeOpacity="0.28"
+            strokeWidth="1"
+            strokeDasharray="2 2"
+            className="text-theme-gold"
+          />
+
+          {/* Cadran intérieur de l'horloge */}
+          <circle
+            cx="16"
+            cy="16"
+            r="7.8"
+            fill="rgba(0,0,0,0.55)"
+            stroke="currentColor"
+            strokeOpacity="0.45"
+            strokeWidth="1.2"
+            className="text-theme-gold"
+          />
+
+          {/* Aiguille trotteuse qui tourne en continu autour des 3 points */}
+          <g className="origin-[16px_16px] animate-[spin_10s_linear_infinite]">
+            <line
+              x1="16"
+              y1="16"
+              x2="16"
+              y2="5.8"
+              stroke="var(--theme-gold)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeOpacity="0.7"
+            />
+          </g>
+
+          {/* Aiguille principale pointant vers le royaume actif */}
+          <g
+            style={{
+              transform: `rotate(${activePoint.angle}deg)`,
+              transformOrigin: '16px 16px',
+              transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)'
+            }}
+          >
+            <line
+              x1="16"
+              y1="16"
+              x2="16"
+              y2="7.5"
+              stroke={activePoint.color}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </g>
+
+          {/* Pivot central doré */}
+          <circle cx="16" cy="16" r="1.8" fill="var(--theme-gold)" />
+
+          {/* Les 3 points représentant les 3 royaumes */}
+          {REALM_POINTS.map((pt) => {
+            const isActive = pt.id === currentPeriod;
+            return (
+              <g key={pt.id}>
+                {isActive && (
+                  <circle
+                    cx={pt.cx}
+                    cy={pt.cy}
+                    r="4.2"
+                    fill={pt.color}
+                    fillOpacity="0.28"
+                    className="animate-ping"
+                  />
+                )}
+                <circle
+                  cx={pt.cx}
+                  cy={pt.cy}
+                  r={isActive ? '2.8' : '2.1'}
+                  fill={pt.color}
+                  stroke="#ffffff"
+                  strokeWidth={isActive ? '1.1' : '0.5'}
+                  strokeOpacity={isActive ? '0.95' : '0.45'}
+                />
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+
+      {/* Heure & Nom simple du royaume actif */}
+      <div className="flex flex-col items-start text-left leading-tight pr-0.5">
+        <span className="font-mono text-[10px] sm:text-[11px] text-theme-gold font-semibold">
+          {currentTimeFormatted || '10:06'}
         </span>
-
-        <div className="flex flex-col items-start text-left leading-tight">
-          <div className="flex items-center gap-1">
-            <span className="font-mono text-[10px] sm:text-[11px] text-theme-gold font-semibold">
-              {currentTimeFormatted || '10:06'}
-            </span>
-            <span className="text-[10px] text-theme-text-muted hidden md:inline">• Royaume</span>
-          </div>
-          <span className="text-[10px] sm:text-[11px] text-theme-text font-medium truncate max-w-[96px] sm:max-w-[155px]">
-            {currentTheme.name}
-          </span>
-        </div>
-
-        <ChevronDown
-          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-theme-text-muted transition-transform duration-300 flex-shrink-0 ${
-            isOpen ? 'rotate-180 text-theme-gold' : ''
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2.5 w-80 sm:w-96 rounded-2xl glass-panel p-4 shadow-2xl border border-theme-border animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <Compass className="w-4 h-4 text-theme-gold" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-theme-text">
-                Les 3 Royaumes d&apos;Underland
-              </span>
-            </div>
-            {isManualOverride && (
-              <button
-                type="button"
-                onClick={() => {
-                  onResetToRealTime();
-                  setIsOpen(false);
-                }}
-                className="flex items-center gap-1 text-[11px] text-theme-gold hover:underline cursor-pointer"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Chronosphère Auto</span>
-              </button>
-            )}
-          </div>
-
-          <div className="space-y-2.5">
-            {allThemes.map((theme) => {
-              const isSelected = currentTheme.id === theme.id;
-              return (
-                <button
-                  key={theme.id}
-                  type="button"
-                  onClick={() => {
-                    onSelectTheme(theme.id);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-300 cursor-pointer border ${
-                    isSelected
-                      ? 'bg-theme-surface border-theme-gold/70 shadow-glow-gold'
-                      : 'hover:bg-white/5 border-white/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md flex-shrink-0"
-                      style={{
-                        backgroundColor: theme.colors.bg,
-                        color: theme.colors.gold,
-                        border: `1px solid ${theme.colors.primary}`
-                      }}
-                    >
-                      <RealmEmblem realmId={theme.id} className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-semibold text-theme-text flex items-center gap-2">
-                        <span className="truncate">{theme.name}</span>
-                        <span className="flex items-center gap-1 flex-shrink-0">
-                          <span
-                            className="w-2.5 h-2.5 rounded-full border border-white/20"
-                            style={{ backgroundColor: theme.colors.bg }}
-                          />
-                          <span
-                            className="w-2.5 h-2.5 rounded-full border border-white/20"
-                            style={{ backgroundColor: theme.colors.primary }}
-                          />
-                          <span
-                            className="w-2.5 h-2.5 rounded-full border border-white/20"
-                            style={{ backgroundColor: theme.colors.gold }}
-                          />
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-theme-text-muted truncate">
-                        {theme.subName}
-                      </div>
-                      <div className="text-[10px] font-mono text-theme-gold/80 mt-0.5">
-                        Cycle Chronosphère : {theme.timeRange}
-                      </div>
-                    </div>
-                  </div>
-
-                  {isSelected && (
-                    <span className="w-5 h-5 rounded-full bg-theme-gold/20 border border-theme-gold flex items-center justify-center text-theme-gold flex-shrink-0 ml-2">
-                      <Check className="w-3 h-3" />
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          <p className="mt-3 pt-2.5 text-[11px] text-center text-theme-text-muted border-t border-white/10">
-            Voyagez entre le Monde Éveillé (Marmoreal), le Monde de la Nuit (Bois de Tulgey 10/6) et la Cour Écarlate (Salazen Grum).
-          </p>
-        </div>
-      )}
+        <span className="text-[10px] sm:text-[11px] text-theme-text font-medium whitespace-nowrap">
+          {currentTheme.name}
+        </span>
+      </div>
     </div>
   );
 };

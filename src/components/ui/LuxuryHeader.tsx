@@ -6,23 +6,15 @@ import { MagicClockToggle } from '../theme/MagicClockToggle';
 interface LuxuryHeaderProps {
   onOpenOrder: () => void;
   currentTheme: ThemeConfig;
-  allThemes: ThemeConfig[];
   currentPeriod: ThemePeriod;
-  isManualOverride: boolean;
   currentTimeFormatted: string;
-  onSelectTheme: (period: ThemePeriod) => void;
-  onResetToRealTime: () => void;
 }
 
 export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
   onOpenOrder,
   currentTheme,
-  allThemes,
   currentPeriod,
-  isManualOverride,
-  currentTimeFormatted,
-  onSelectTheme,
-  onResetToRealTime
+  currentTimeFormatted
 }) => {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -33,20 +25,11 @@ export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 px-3 sm:px-8 py-3.5 sm:py-4 pointer-events-none">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
-        {/* Left Brand Signature */}
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="pointer-events-auto flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass-panel hover:border-theme-gold/50 transition-all duration-300 cursor-pointer group flex-shrink-0"
-        >
-          <span className="w-2 h-2 rounded-full bg-theme-gold group-hover:scale-125 transition-transform" />
-          <span className="font-serif text-xs sm:text-base font-bold tracking-wider text-theme-text whitespace-nowrap">
-            Maison Alice
-          </span>
-        </button>
+      <div className="max-w-7xl mx-auto flex items-center justify-end lg:justify-between gap-2">
+        {/* Espace d'équilibre sur grand écran (sans le badge Maison Alice à gauche) */}
+        <div className="hidden lg:block w-48" aria-hidden="true" />
 
-        {/* Center Navigation Pill */}
+        {/* Navigation centrale */}
         <nav
           aria-label="Navigation principale"
           className="hidden lg:flex items-center gap-1 px-2 py-1.5 rounded-full glass-panel pointer-events-auto text-xs font-medium"
@@ -56,14 +39,14 @@ export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
             onClick={() => scrollTo('packs-showcase')}
             className="px-4 py-2 rounded-full text-theme-text/85 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
           >
-            Les Coffrets
+            Nos Coffrets
           </button>
           <button
             type="button"
             onClick={() => scrollTo('how-it-works')}
             className="px-4 py-2 rounded-full text-theme-text/85 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
           >
-            En 3 Instants
+            En 3 Étapes
           </button>
           <button
             type="button"
@@ -74,16 +57,12 @@ export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
           </button>
         </nav>
 
-        {/* Right Controls: 3 Realms Switcher + Order CTA */}
+        {/* Droite : Petite horloge automatique des 3 royaumes + Bouton Commander */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <MagicClockToggle
             currentTheme={currentTheme}
-            allThemes={allThemes}
             currentPeriod={currentPeriod}
-            isManualOverride={isManualOverride}
             currentTimeFormatted={currentTimeFormatted}
-            onSelectTheme={onSelectTheme}
-            onResetToRealTime={onResetToRealTime}
           />
 
           <button

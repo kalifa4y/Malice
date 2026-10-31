@@ -22,10 +22,10 @@ export const BamakoDeliveryPaymentSection: React.FC<BamakoDeliveryPaymentSection
             <div>
               <div className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-semibold">
                 <AnimatedGoldenKeySvg className="w-3.5 h-3.5" />
-                <span>0 FCFA • Sac Isotherme 7j/7</span>
+                <span>0 FCFA • 7j/7 à Bamako</span>
               </div>
               <h3 className="font-serif text-xl sm:text-2xl font-semibold text-theme-text">
-                Livraison Offerte à Bamako
+                Livraison Gratuite à Bamako
               </h3>
               <p className="text-xs text-theme-text-muted mt-0.5">
                 Rive Gauche &amp; Rive Droite • Quartier ou Position GPS

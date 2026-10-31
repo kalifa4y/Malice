@@ -52,12 +52,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     settings.adminEmail ? 'login' : 'register'
   );
 
-  // Login states
   const [loginEmail, setLoginEmail] = useState(settings.adminEmail || '');
   const [adminPassword, setAdminPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // Registration (Email + Password) states
   const [regEmail, setRegEmail] = useState(settings.adminEmail || '');
   const [regCurrentPass, setRegCurrentPass] = useState('');
   const [regNewPass, setRegNewPass] = useState('');
@@ -65,7 +63,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [regError, setRegError] = useState('');
   const [generatedKeyModal, setGeneratedKeyModal] = useState<string | null>(null);
 
-  // Forgot Password states
   const [recoveryMethod, setRecoveryMethod] = useState<'email' | 'backup_key'>('email');
   const [recoveryEmail, setRecoveryEmail] = useState(settings.adminEmail || '');
   const [otpSent, setOtpSent] = useState(false);
@@ -89,7 +86,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const configuredEmail = (settings.adminEmail || '').trim().toLowerCase();
 
     if (configuredEmail && loginEmail.trim().toLowerCase() !== configuredEmail) {
-      setLoginError("L'adresse email saisie ne correspond pas au compte administrateur.");
+      setLoginError('Email incorrect.');
       return;
     }
 
@@ -101,7 +98,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       setIsAuthenticated(true);
       setLoginError('');
     } else {
-      setLoginError('Mot de passe administrateur incorrect.');
+      setLoginError('Mot de passe incorrect.');
     }
   };
 
@@ -111,26 +108,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     const emailClean = regEmail.trim().toLowerCase();
     if (!emailClean || !emailClean.includes('@')) {
-      setRegError('Veuillez renseigner une adresse email valide pour la récupération.');
+      setRegError('Email invalide.');
       return;
     }
 
-    // If an admin account was already registered before, check current password
     const configuredPassword = settings.adminPassword || 'admin';
     if (settings.isAdminRegistered && settings.adminEmail) {
       if (regCurrentPass.trim() !== configuredPassword) {
-        setRegError('Mot de passe actuel requis pour modifier le compte existant.');
+        setRegError('Mot de passe actuel requis.');
         return;
       }
     }
 
     if (!regNewPass || regNewPass.trim().length < 4) {
-      setRegError('Veuillez choisir un mot de passe d’au moins 4 caractères.');
+      setRegError('Minimum 4 caractères.');
       return;
     }
 
     if (regNewPass !== regConfirmPass) {
-      setRegError('La confirmation du mot de passe ne correspond pas.');
+      setRegError('Les mots de passe diffèrent.');
       return;
     }
 
@@ -149,7 +145,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!configuredEmail) {
       setRecoveryStatus({
         type: 'error',
-        text: "Aucun email n'est encore inscrit. Utilisez l'onglet « Inscrire mon email » pour créer votre accès."
+        text: 'Aucun email enregistré.'
       });
       return;
     }
@@ -157,7 +153,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (recoveryEmail.trim().toLowerCase() !== configuredEmail) {
       setRecoveryStatus({
         type: 'error',
-        text: "Cette adresse email ne correspond pas à l'email administrateur enregistré."
+        text: 'Email non reconnu.'
       });
       return;
     }
@@ -170,7 +166,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     setRecoveryStatus({
       type: result.sent ? 'success' : 'info',
-      text: result.message
+      text: result.sent ? `Code envoyé à ${configuredEmail}.` : 'Utilisez votre clé de secours.'
     });
   };
 
@@ -181,7 +177,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!resetNewPass || resetNewPass.trim().length < 4) {
       setRecoveryStatus({
         type: 'error',
-        text: 'Le nouveau mot de passe doit contenir au moins 4 caractères.'
+        text: 'Minimum 4 caractères.'
       });
       return;
     }
@@ -189,7 +185,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (resetNewPass !== resetConfirmPass) {
       setRecoveryStatus({
         type: 'error',
-        text: 'La confirmation ne correspond pas au nouveau mot de passe.'
+        text: 'Les mots de passe diffèrent.'
       });
       return;
     }
@@ -199,7 +195,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       if (!check.valid) {
         setRecoveryStatus({
           type: 'error',
-          text: check.reason || 'Code de vérification invalide.'
+          text: 'Code invalide.'
         });
         return;
       }
@@ -208,7 +204,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       if (!expectedKey || backupKeyInput.trim().toUpperCase() !== expectedKey) {
         setRecoveryStatus({
           type: 'error',
-          text: 'Clé de secours administrateur incorrecte.'
+          text: 'Clé incorrecte.'
         });
         return;
       }
@@ -224,14 +220,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     setRecoveryStatus({
       type: 'success',
-      text: 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter.'
+      text: 'Mot de passe modifié.'
     });
 
     setTimeout(() => {
       setAuthMode('login');
       setAdminPassword('');
       setRecoveryStatus(null);
-    }, 1800);
+    }, 1200);
   };
 
   const handleLogout = () => {
@@ -289,31 +285,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-theme-bg font-sans">
-        <div className="w-full max-w-md p-7 sm:p-8 rounded-3xl glass-panel border border-theme-border shadow-2xl space-y-6">
-          {/* Header */}
-          <div className="text-center space-y-2">
-            <div className="w-14 h-14 rounded-2xl bg-theme-surface flex items-center justify-center mx-auto text-theme-gold border border-theme-gold/40 shadow-glow-gold">
-              <Lock className="w-6 h-6" />
+        <div className="w-full max-w-sm p-6 rounded-3xl glass-panel border border-theme-border shadow-2xl space-y-5">
+          <div className="text-center space-y-1.5">
+            <div className="w-12 h-12 rounded-2xl bg-theme-surface flex items-center justify-center mx-auto text-theme-gold border border-theme-gold/40">
+              <Lock className="w-5 h-5" />
             </div>
-            <h2 className="font-serif text-3xl font-bold text-theme-text">
-              Administration Maison Alice
-            </h2>
-            <p className="text-xs text-theme-text-muted">
-              Accès sécurisé par email &amp; récupération rapide
-            </p>
+            <h2 className="font-serif text-2xl font-bold text-theme-text">Maison Alice</h2>
           </div>
 
-          {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-theme-surface/80 border border-white/10 text-xs font-semibold">
+          <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-theme-surface/80 border border-white/10 text-xs font-semibold">
             <button
               type="button"
               onClick={() => {
                 setAuthMode('login');
                 setLoginError('');
               }}
-              className={`py-2 px-2 rounded-xl transition-all cursor-pointer ${
+              className={`py-2 rounded-xl transition-all cursor-pointer ${
                 authMode === 'login'
-                  ? 'bg-theme-primary text-white shadow-glow-primary'
+                  ? 'bg-theme-primary text-white'
                   : 'text-theme-text-muted hover:text-white'
               }`}
             >
@@ -325,13 +314,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 setAuthMode('register');
                 setRegError('');
               }}
-              className={`py-2 px-2 rounded-xl transition-all cursor-pointer ${
+              className={`py-2 rounded-xl transition-all cursor-pointer ${
                 authMode === 'register'
-                  ? 'bg-theme-primary text-white shadow-glow-primary'
+                  ? 'bg-theme-primary text-white'
                   : 'text-theme-text-muted hover:text-white'
               }`}
             >
-              Inscrire Email
+              Mon Email
             </button>
             <button
               type="button"
@@ -339,43 +328,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 setAuthMode('forgot_password');
                 setRecoveryStatus(null);
               }}
-              className={`py-2 px-2 rounded-xl transition-all cursor-pointer ${
+              className={`py-2 rounded-xl transition-all cursor-pointer ${
                 authMode === 'forgot_password'
-                  ? 'bg-theme-primary text-white shadow-glow-primary'
+                  ? 'bg-theme-primary text-white'
                   : 'text-theme-text-muted hover:text-white'
               }`}
             >
-              Récupération
+              Oubli ?
             </button>
           </div>
 
-          {/* Generated Recovery Key Confirmation Modal */}
           {generatedKeyModal ? (
-            <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-4 text-center">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-              <div className="space-y-1">
-                <h3 className="font-serif text-xl font-bold text-white">
-                  Compte Email Enregistré
-                </h3>
-                <p className="text-xs text-theme-text-muted">
-                  Votre email <strong className="text-white">{settings.adminEmail}</strong> est
-                  désormais associé à votre espace administrateur.
-                </p>
-              </div>
+            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-4 text-center">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
+              <h3 className="font-serif text-lg font-bold text-white">Email enregistré</h3>
 
-              <div className="p-3.5 rounded-xl bg-black/50 border border-theme-gold/40 space-y-1">
+              <div className="p-3 rounded-xl bg-black/50 border border-theme-gold/40 space-y-1">
                 <span className="text-[10px] uppercase tracking-wider text-theme-text-muted block">
-                  Votre Clé de Secours Personnelle (à conserver) :
+                  Clé de secours :
                 </span>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="font-mono text-base font-bold text-theme-gold">
+                  <span className="font-mono text-sm font-bold text-theme-gold">
                     {generatedKeyModal}
                   </span>
                   <button
                     type="button"
                     onClick={() => navigator.clipboard?.writeText(generatedKeyModal)}
                     className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-                    title="Copier la clé"
+                    title="Copier"
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
@@ -389,71 +369,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   localDB.setAdminLoggedIn(true);
                   setIsAuthenticated(true);
                 }}
-                className="w-full py-3.5 rounded-xl bg-theme-primary text-white font-semibold text-xs uppercase tracking-wider cursor-pointer"
+                className="w-full py-3 rounded-xl bg-theme-primary text-white font-semibold text-xs uppercase tracking-wider cursor-pointer"
               >
-                Accéder au Tableau de Bord
+                Ouvrir
               </button>
             </div>
           ) : (
             <>
-              {/* 1. LOGIN VIEW */}
               {authMode === 'login' && (
-                <form onSubmit={handleLogin} className="space-y-4 text-left">
-                  {settings.adminEmail ? (
+                <form onSubmit={handleLogin} className="space-y-3.5 text-left">
+                  {settings.adminEmail && (
                     <div>
-                      <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                        Email Administrateur
+                      <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                        Email
                       </label>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 text-theme-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
-                        <input
-                          type="email"
-                          value={loginEmail}
-                          onChange={(e) => setLoginEmail(e.target.value)}
-                          placeholder="votre-email@exemple.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
-                          required
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex items-center justify-between gap-2">
-                      <span>Aucun email lié pour le moment.</span>
-                      <button
-                        type="button"
-                        onClick={() => setAuthMode('register')}
-                        className="underline font-semibold text-theme-gold cursor-pointer whitespace-nowrap"
-                      >
-                        Inscrire mon email
-                      </button>
+                      <input
+                        type="email"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="email@exemple.com"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        required
+                      />
                     </div>
                   )}
 
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-xs font-semibold text-theme-text-muted">
-                        Mot de passe
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setAuthMode('forgot_password')}
-                        className="text-xs text-theme-gold hover:underline cursor-pointer"
-                      >
-                        Mot de passe oublié ?
-                      </button>
-                    </div>
+                    <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                      Mot de passe
+                    </label>
                     <input
                       type="password"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
-                      placeholder="Saisissez votre mot de passe"
-                      className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                      placeholder="Mot de passe"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
                       required
                     />
                   </div>
 
                   {loginError && (
-                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
+                    <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
                       <span>{loginError}</span>
                     </div>
@@ -461,82 +417,75 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-xl font-semibold text-white shadow-glow-primary transition-all duration-300 hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
+                    className="w-full py-3 rounded-xl font-semibold text-white shadow-glow-primary transition-all hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
                   >
-                    Déverrouiller l&apos;espace Admin
+                    Entrer
                   </button>
                 </form>
               )}
 
-              {/* 2. REGISTER EMAIL & PASSWORD VIEW */}
               {authMode === 'register' && (
-                <form onSubmit={handleRegisterAdmin} className="space-y-4 text-left">
-                  <p className="text-xs text-theme-text-muted leading-relaxed">
-                    Inscrivez votre adresse email pour sécuriser votre accès et pouvoir récupérer
-                    votre mot de passe à tout moment.
-                  </p>
-
+                <form onSubmit={handleRegisterAdmin} className="space-y-3.5 text-left">
                   <div>
-                    <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                      Votre Adresse Email *
+                    <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                      Votre Email
                     </label>
                     <input
                       type="email"
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
-                      placeholder="contact@maisonalice.com"
-                      className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                      placeholder="email@exemple.com"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
                       required
                     />
                   </div>
 
                   {settings.isAdminRegistered && settings.adminEmail && (
                     <div>
-                      <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                        Mot de passe actuel *
+                      <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                        Mot de passe actuel
                       </label>
                       <input
                         type="password"
                         value={regCurrentPass}
                         onChange={(e) => setRegCurrentPass(e.target.value)}
-                        placeholder="Mot de passe actuel"
-                        className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
                         required
                       />
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                        Nouveau mot de passe *
+                      <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                        Nouveau
                       </label>
                       <input
                         type="password"
                         value={regNewPass}
                         onChange={(e) => setRegNewPass(e.target.value)}
-                        placeholder="Min. 4 caractères"
-                        className="w-full px-3.5 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        placeholder="4+ caract."
+                        className="w-full px-3 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                        Confirmer *
+                      <label className="block text-xs font-semibold text-theme-text-muted mb-1">
+                        Confirmer
                       </label>
                       <input
                         type="password"
                         value={regConfirmPass}
                         onChange={(e) => setRegConfirmPass(e.target.value)}
                         placeholder="Répéter"
-                        className="w-full px-3.5 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        className="w-full px-3 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
                         required
                       />
                     </div>
                   </div>
 
                   {regError && (
-                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
+                    <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
                       <span>{regError}</span>
                     </div>
@@ -544,21 +493,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-xl font-semibold text-white shadow-glow-primary transition-all duration-300 hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
+                    className="w-full py-3 rounded-xl font-semibold text-white shadow-glow-primary transition-all hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
                   >
-                    Enregistrer mon Email &amp; Mot de passe
+                    Enregistrer
                   </button>
                 </form>
               )}
 
-              {/* 3. FORGOT PASSWORD RECOVERY VIEW */}
               {authMode === 'forgot_password' && (
-                <div className="space-y-4 text-left">
-                  <div className="flex gap-2">
+                <div className="space-y-3.5 text-left">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setRecoveryMethod('email')}
-                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 cursor-pointer ${
+                      className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 cursor-pointer ${
                         recoveryMethod === 'email'
                           ? 'border-theme-gold bg-theme-gold/15 text-theme-gold'
                           : 'border-white/10 bg-theme-surface/40 text-theme-text-muted'
@@ -570,124 +518,95 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <button
                       type="button"
                       onClick={() => setRecoveryMethod('backup_key')}
-                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 cursor-pointer ${
+                      className={`py-2 px-3 rounded-xl text-xs font-semibold border flex items-center justify-center gap-1.5 cursor-pointer ${
                         recoveryMethod === 'backup_key'
                           ? 'border-theme-gold bg-theme-gold/15 text-theme-gold'
                           : 'border-white/10 bg-theme-surface/40 text-theme-text-muted'
                       }`}
                     >
                       <KeyRound className="w-3.5 h-3.5" />
-                      <span>Clé de Secours</span>
+                      <span>Par Clé</span>
                     </button>
                   </div>
 
                   {recoveryMethod === 'email' && (
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                          Votre adresse email administrateur inscrite :
-                        </label>
-                        <div className="flex gap-2">
-                          <input
-                            type="email"
-                            value={recoveryEmail}
-                            onChange={(e) => setRecoveryEmail(e.target.value)}
-                            placeholder="Votre email inscrit"
-                            className="flex-1 px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
-                          />
-                          <button
-                            type="button"
-                            onClick={handleSendRecoveryOtp}
-                            disabled={isSendingEmail}
-                            className="px-4 py-2.5 rounded-xl bg-theme-gold/20 border border-theme-gold/50 text-theme-gold text-xs font-semibold hover:bg-theme-gold/30 transition-colors cursor-pointer whitespace-nowrap"
-                          >
-                            {isSendingEmail ? 'Envoi...' : otpSent ? 'Renvoyer' : 'Recevoir le code'}
-                          </button>
-                        </div>
-                      </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={recoveryEmail}
+                        onChange={(e) => setRecoveryEmail(e.target.value)}
+                        placeholder="Votre email"
+                        className="flex-1 px-3 py-2 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSendRecoveryOtp}
+                        disabled={isSendingEmail}
+                        className="px-3 py-2 rounded-xl bg-theme-gold/20 border border-theme-gold/50 text-theme-gold text-xs font-semibold cursor-pointer whitespace-nowrap"
+                      >
+                        {isSendingEmail ? '...' : otpSent ? 'Renvoyer' : 'Code'}
+                      </button>
                     </div>
                   )}
 
-                  <form onSubmit={handleResetPasswordSubmit} className="space-y-3 pt-1">
+                  <form onSubmit={handleResetPasswordSubmit} className="space-y-3">
                     {recoveryMethod === 'email' ? (
-                      <div>
-                        <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                          Code à 6 chiffres reçu par email :
-                        </label>
-                        <input
-                          type="text"
-                          value={otpInput}
-                          onChange={(e) => setOtpInput(e.target.value)}
-                          placeholder="Ex : 482910"
-                          className="w-full px-4 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-center tracking-widest text-theme-text focus:outline-none focus:border-theme-gold"
-                          required
-                        />
-                      </div>
+                      <input
+                        type="text"
+                        value={otpInput}
+                        onChange={(e) => setOtpInput(e.target.value)}
+                        placeholder="Code à 6 chiffres"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-center tracking-widest text-theme-text focus:outline-none focus:border-theme-gold"
+                        required
+                      />
                     ) : (
-                      <div>
-                        <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                          Clé de Secours Administrateur :
-                        </label>
-                        <input
-                          type="text"
-                          value={backupKeyInput}
-                          onChange={(e) => setBackupKeyInput(e.target.value)}
-                          placeholder="ALICE-XXXX-XXXX"
-                          className="w-full px-4 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-center tracking-wider text-theme-text focus:outline-none focus:border-theme-gold"
-                          required
-                        />
-                      </div>
+                      <input
+                        type="text"
+                        value={backupKeyInput}
+                        onChange={(e) => setBackupKeyInput(e.target.value)}
+                        placeholder="Clé (ALICE-XXXX-XXXX)"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm font-mono text-center tracking-wider text-theme-text focus:outline-none focus:border-theme-gold"
+                        required
+                      />
                     )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-theme-text-muted mb-1">
-                          Nouveau mot de passe
-                        </label>
-                        <input
-                          type="password"
-                          value={resetNewPass}
-                          onChange={(e) => setResetNewPass(e.target.value)}
-                          placeholder="Min. 4 caractères"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-theme-text-muted mb-1">
-                          Confirmer
-                        </label>
-                        <input
-                          type="password"
-                          value={resetConfirmPass}
-                          onChange={(e) => setResetConfirmPass(e.target.value)}
-                          placeholder="Répéter"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
-                          required
-                        />
-                      </div>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <input
+                        type="password"
+                        value={resetNewPass}
+                        onChange={(e) => setResetNewPass(e.target.value)}
+                        placeholder="Nouveau"
+                        className="w-full px-3 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        required
+                      />
+                      <input
+                        type="password"
+                        value={resetConfirmPass}
+                        onChange={(e) => setResetConfirmPass(e.target.value)}
+                        placeholder="Confirmer"
+                        className="w-full px-3 py-2.5 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold"
+                        required
+                      />
                     </div>
 
                     {recoveryStatus && (
                       <div
-                        className={`p-3 rounded-xl border text-xs flex items-start gap-2 ${
+                        className={`p-2.5 rounded-xl border text-xs flex items-center gap-2 ${
                           recoveryStatus.type === 'success'
                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                            : recoveryStatus.type === 'error'
-                            ? 'bg-red-500/10 border-red-500/30 text-red-300'
-                            : 'bg-amber-500/10 border-amber-500/30 text-amber-200'
+                            : 'bg-red-500/10 border-red-500/30 text-red-300'
                         }`}
                       >
-                        <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
                         <span>{recoveryStatus.text}</span>
                       </div>
                     )}
 
                     <button
                       type="submit"
-                      className="w-full py-3.5 px-6 rounded-xl font-semibold text-white shadow-glow-primary transition-all duration-300 hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
+                      className="w-full py-3 rounded-xl font-semibold text-white shadow-glow-primary transition-all hover:brightness-110 cursor-pointer text-sm bg-theme-primary"
                     >
-                      Réinitialiser mon mot de passe
+                      Valider
                     </button>
                   </form>
                 </div>
@@ -695,15 +614,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </>
           )}
 
-          {/* Back to Storefront */}
-          <div className="pt-4 border-t border-white/10">
+          <div className="pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={onBackToStore}
               className="text-xs text-theme-text-muted hover:text-theme-gold transition-colors flex items-center justify-center gap-1.5 mx-auto cursor-pointer font-semibold"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Retourner à la boutique Maison Alice</span>
+              <span>Boutique</span>
             </button>
           </div>
         </div>
@@ -713,35 +631,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="min-h-screen bg-theme-bg text-theme-text font-sans selection:bg-theme-primary/30 flex">
-      {/* Sidebar */}
-      <aside className="w-64 flex-shrink-0 border-r border-white/10 bg-theme-surface/30 backdrop-blur-xl flex-col hidden md:flex">
-        <div className="p-6 border-b border-white/10">
-          <h1 className="font-serif text-2xl font-bold text-theme-text leading-tight">
-            Maison Alice
-          </h1>
-          <p className="text-[11px] text-theme-gold uppercase tracking-widest mt-1">
-            Administration
-          </p>
+      {/* Barre latérale */}
+      <aside className="w-56 flex-shrink-0 border-r border-white/10 bg-theme-surface/30 backdrop-blur-xl flex-col hidden md:flex">
+        <div className="p-5 border-b border-white/10">
+          <h1 className="font-serif text-xl font-bold text-theme-text">Maison Alice</h1>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1.5">
           {[
             { id: 'orders', label: 'Commandes', icon: Package, count: orders.length },
             { id: 'packs', label: 'Coffrets', icon: Box, count: packs.length },
-            { id: 'zones', label: 'Zones Bamako', icon: MapPin, count: zones.length },
-            { id: 'settings', label: 'Paramètres & Email', icon: Settings }
+            { id: 'zones', label: 'Quartiers', icon: MapPin, count: zones.length },
+            { id: 'settings', label: 'Réglages', icon: Settings }
           ].map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id as any)}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-theme-primary text-white shadow-glow-primary'
                   : 'text-theme-text-muted hover:text-theme-text hover:bg-theme-surface/60'
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <tab.icon
                   className={`w-4 h-4 ${
                     activeTab === tab.id ? 'text-white' : 'text-theme-gold'
@@ -764,43 +677,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           ))}
         </div>
 
-        <div className="p-4 border-t border-white/10 space-y-2">
+        <div className="p-3 border-t border-white/10 space-y-1">
           <button
             type="button"
             onClick={() => {
               setOrders(localDB.getOrders());
               if (onRefreshData) onRefreshData();
             }}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-theme-surface/50 text-xs font-semibold transition-all cursor-pointer text-theme-text-muted hover:text-theme-text"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl hover:bg-theme-surface/50 text-xs font-semibold transition-all cursor-pointer text-theme-text-muted hover:text-theme-text"
           >
-            <RefreshCw className="w-4 h-4 text-theme-gold" />
+            <RefreshCw className="w-3.5 h-3.5 text-theme-gold" />
             <span>Actualiser</span>
           </button>
           <button
             type="button"
             onClick={onBackToStore}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-theme-surface/50 text-xs font-semibold transition-all cursor-pointer text-theme-text-muted hover:text-theme-text"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl hover:bg-theme-surface/50 text-xs font-semibold transition-all cursor-pointer text-theme-text-muted hover:text-theme-text"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Voir la Vitrine</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Boutique</span>
           </button>
           <button
             type="button"
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 text-xs font-semibold transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-red-400 hover:bg-red-500/10 text-xs font-semibold transition-colors cursor-pointer"
           >
-            <Lock className="w-4 h-4" />
-            <span>Déconnexion</span>
+            <Lock className="w-3.5 h-3.5" />
+            <span>Quitter</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Contenu principal */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-white/10 bg-theme-surface/40 backdrop-blur-xl">
-          <h1 className="font-serif text-xl font-bold">Maison Alice Admin</h1>
-          <div className="flex gap-1.5">
+        <div className="md:hidden flex items-center justify-between p-3.5 border-b border-white/10 bg-theme-surface/40 backdrop-blur-xl">
+          <h1 className="font-serif text-lg font-bold">Maison Alice</h1>
+          <div className="flex gap-1">
             {[
               { id: 'orders', icon: Package },
               { id: 'packs', icon: Box },
@@ -821,73 +733,67 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8">
-          {/* Prompt Banner if Admin Email is not yet registered */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           {!settings.adminEmail && activeTab !== 'settings' && (
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3 text-xs text-amber-200">
-                <ShieldCheck className="w-5 h-5 text-theme-gold flex-shrink-0" />
-                <span>
-                  <strong>Sécurité Admin :</strong> Associez votre adresse email pour activer la
-                  récupération facile de votre mot de passe.
-                </span>
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 text-xs text-amber-200">
+                <ShieldCheck className="w-4 h-4 text-theme-gold flex-shrink-0" />
+                <span>Ajoutez un email de secours</span>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveTab('settings')}
-                className="px-4 py-2 rounded-xl bg-theme-gold text-black font-semibold text-xs cursor-pointer whitespace-nowrap"
+                className="px-3.5 py-1.5 rounded-xl bg-theme-gold text-black font-semibold text-xs cursor-pointer"
               >
-                Inscrire mon email
+                Ajouter
               </button>
             </div>
           )}
 
-          {/* Metrics Grid on Orders Tab */}
           {activeTab === 'orders' && (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 rounded-2xl glass-panel relative overflow-hidden">
-                <span className="text-xs font-semibold text-theme-text-muted uppercase tracking-wider">
-                  Chiffre d&apos;Affaires
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+              <div className="p-4 rounded-2xl glass-panel relative overflow-hidden">
+                <span className="text-[11px] font-semibold text-theme-text-muted uppercase">
+                  Revenus
                 </span>
-                <div className="text-2xl sm:text-3xl font-bold text-theme-gold font-mono mt-2">
-                  {totalRevenue.toLocaleString('fr-FR')} <span className="text-xs">FCFA</span>
+                <div className="text-xl sm:text-2xl font-bold text-theme-gold font-mono mt-1">
+                  {totalRevenue.toLocaleString('fr-FR')} <span className="text-xs">F</span>
                 </div>
-                <DollarSign className="w-12 h-12 text-theme-gold/15 absolute bottom-2 right-2" />
+                <DollarSign className="w-10 h-10 text-theme-gold/15 absolute bottom-2 right-2" />
               </div>
 
-              <div className="p-5 rounded-2xl glass-panel relative overflow-hidden">
-                <span className="text-xs font-semibold text-theme-text-muted uppercase tracking-wider">
+              <div className="p-4 rounded-2xl glass-panel relative overflow-hidden">
+                <span className="text-[11px] font-semibold text-theme-text-muted uppercase">
                   Commandes
                 </span>
-                <div className="text-2xl sm:text-3xl font-bold text-theme-text font-mono mt-2">
+                <div className="text-xl sm:text-2xl font-bold text-theme-text font-mono mt-1">
                   {orders.length}
                 </div>
-                <Package className="w-12 h-12 text-theme-primary/15 absolute bottom-2 right-2" />
+                <Package className="w-10 h-10 text-theme-primary/15 absolute bottom-2 right-2" />
               </div>
 
-              <div className="p-5 rounded-2xl glass-panel relative overflow-hidden">
-                <span className="text-xs font-semibold text-theme-text-muted uppercase tracking-wider">
-                  En attente
+              <div className="p-4 rounded-2xl glass-panel relative overflow-hidden">
+                <span className="text-[11px] font-semibold text-theme-text-muted uppercase">
+                  À payer
                 </span>
-                <div className="text-2xl sm:text-3xl font-bold text-amber-400 font-mono mt-2">
+                <div className="text-xl sm:text-2xl font-bold text-amber-400 font-mono mt-1">
                   {pendingOrdersCount}
                 </div>
-                <Clock className="w-12 h-12 text-amber-400/15 absolute bottom-2 right-2" />
+                <Clock className="w-10 h-10 text-amber-400/15 absolute bottom-2 right-2" />
               </div>
 
-              <div className="p-5 rounded-2xl glass-panel relative overflow-hidden">
-                <span className="text-xs font-semibold text-theme-text-muted uppercase tracking-wider">
-                  En livraison
+              <div className="p-4 rounded-2xl glass-panel relative overflow-hidden">
+                <span className="text-[11px] font-semibold text-theme-text-muted uppercase">
+                  En route
                 </span>
-                <div className="text-2xl sm:text-3xl font-bold text-sky-400 font-mono mt-2">
+                <div className="text-xl sm:text-2xl font-bold text-sky-400 font-mono mt-1">
                   {inDeliveryCount}
                 </div>
-                <Truck className="w-12 h-12 text-sky-400/15 absolute bottom-2 right-2" />
+                <Truck className="w-10 h-10 text-sky-400/15 absolute bottom-2 right-2" />
               </div>
             </div>
           )}
 
-          {/* Active View */}
           <div>
             {activeTab === 'orders' && (
               <OrdersView orders={orders} onUpdateOrderStatus={handleUpdateOrderStatus} />

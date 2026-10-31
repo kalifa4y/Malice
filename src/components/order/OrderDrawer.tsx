@@ -236,7 +236,7 @@ export const OrderDrawer: React.FC<OrderDrawerProps> = ({
                 {completedOrder ? 'Commande Enregistrée' : 'Votre Coffret Maison Alice'}
               </h3>
               <p className="text-xs text-theme-text-muted">
-                Livraison isotherme offerte partout à Bamako
+                Livraison gratuite partout à Bamako
               </p>
             </div>
             <button
@@ -589,12 +589,12 @@ export const OrderDrawer: React.FC<OrderDrawerProps> = ({
 
                       <div>
                         <label className="block text-xs font-semibold text-theme-text-muted mb-1.5">
-                          Message à calligraphier sur la carte scellée (Optionnel) :
+                          Message sur la carte cadeau (Optionnel) :
                         </label>
                         <textarea
                           value={notes}
                           onChange={(e) => setNotes(e.target.value)}
-                          placeholder="Votre mot doux ou instructions particulières..."
+                          placeholder="Votre petit mot..."
                           rows={2}
                           className="w-full px-4 py-3 rounded-xl bg-theme-surface border border-white/15 text-sm text-theme-text focus:outline-none focus:border-theme-gold transition-colors resize-none"
                         />

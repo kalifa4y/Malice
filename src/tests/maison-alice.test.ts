@@ -9,7 +9,7 @@ import {
   generateBackupRecoveryKey
 } from '../lib/adminAuth';
 import { Order } from '../types';
-import { THEMES, BAMAKO_DELIVERY_ZONES } from '../lib/constants';
+import { THEMES, BAMAKO_DELIVERY_ZONES, INITIAL_PACKS } from '../lib/constants';
 
 describe('Maison Alice — Business Logic, Admin Email Recovery & Verification Tests', () => {
   beforeEach(() => {
@@ -67,22 +67,32 @@ describe('Maison Alice — Business Logic, Admin Email Recovery & Verification T
     });
   });
 
-  describe('3. Dynamic Underland Realms & Palettes', () => {
-    it('defines the 3 Underland Realms (Marmoreal, Bois de Tulgey 10/6, Salazen Grum) with distinct palettes', () => {
+  describe('3. Dynamic Realms & Simple French Vocabulary', () => {
+    it('defines the 3 Realms (Royaume Blanc, Chapelier Fou, Reine de Cœur) with distinct palettes', () => {
       expect(THEMES.cheshire_night).toBeDefined();
-      expect(THEMES.cheshire_night.name).toBe('Bois de Tulgey • 10/6');
+      expect(THEMES.cheshire_night.name).toBe('Chapelier Fou');
       expect(THEMES.cheshire_night.cardSuit).toBe('spade');
       expect(THEMES.cheshire_night.colors.primary).toBe('#18b8a6');
 
       expect(THEMES.mad_hatter_day).toBeDefined();
-      expect(THEMES.mad_hatter_day.name).toBe('Royaume de Marmoreal');
+      expect(THEMES.mad_hatter_day.name).toBe('Royaume Blanc');
       expect(THEMES.mad_hatter_day.cardSuit).toBe('club');
       expect(THEMES.mad_hatter_day.colors.primary).toBe('#d93870');
 
       expect(THEMES.queen_of_hearts_evening).toBeDefined();
-      expect(THEMES.queen_of_hearts_evening.name).toBe('Cour de Salazen Grum');
+      expect(THEMES.queen_of_hearts_evening.name).toBe('Reine de Cœur');
       expect(THEMES.queen_of_hearts_evening.cardSuit).toBe('heart');
       expect(THEMES.queen_of_hearts_evening.colors.primary).toBe('#dc1e35');
+    });
+
+    it('uses simple, accessible French names for all gift packs without obscure or English terms', () => {
+      expect(INITIAL_PACKS.map((p) => p.name)).toEqual([
+        "Le Coffret d'Alice",
+        'Le Coffret du Chapelier',
+        'Le Coffret de la Reine'
+      ]);
+      const serialized = JSON.stringify(INITIAL_PACKS);
+      expect(serialized).not.toMatch(/Underland|Marmoreal|Salazen|Tulgey|Chronosphère/i);
     });
   });
 

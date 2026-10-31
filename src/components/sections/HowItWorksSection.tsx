@@ -14,18 +14,18 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
   const steps = [
     {
       Illustration: AnimatedHatterHatSvg,
-      title: '1. Choisissez l’Écrin',
-      subtitle: 'Marmoreal, Tulgey 10/6 ou Salazen Grum'
+      title: '1. Choisissez le coffret',
+      subtitle: 'Alice, Chapelier ou Reine de Cœur'
     },
     {
       Illustration: AnimatedWaxSealQuillSvg,
-      title: '2. Signez Votre Mot',
-      subtitle: 'Carte calligraphiée scellée à la cire'
+      title: '2. Écrivez votre mot',
+      subtitle: 'Ajouté sur une belle carte cadeau'
     },
     {
       Illustration: AnimatedChronosphereWatchSvg,
-      title: '3. Livré à Bamako',
-      subtitle: 'Gratuit en sac isotherme 7j/7'
+      title: '3. Livré gratuitement',
+      subtitle: 'Partout à Bamako, 7j/7'
     }
   ];
 
@@ -36,7 +36,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenOrde
     >
       <div className="text-center mb-10 pointer-events-auto">
         <h2 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-theme-text">
-          En 3 Instants
+          En 3 Étapes
         </h2>
       </div>
 

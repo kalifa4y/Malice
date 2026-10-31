@@ -35,10 +35,10 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
           <AnimatedHatterHatSvg className="w-12 h-12" />
         </div>
         <h2 className="font-serif text-3xl sm:text-5xl font-semibold tracking-tight text-theme-text">
-          Les 3 Écrins Royaux
+          Nos 3 Coffrets Cadeaux
         </h2>
         <p className="mt-1.5 text-xs sm:text-sm text-theme-text-muted">
-          Livraison isotherme gratuite partout à Bamako
+          Livraison gratuite partout à Bamako
         </p>
       </div>
 

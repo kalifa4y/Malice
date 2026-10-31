@@ -552,22 +552,41 @@ export const OrderDrawer: React.FC<OrderDrawerProps> = ({
                         <div className="grid grid-cols-3 gap-2.5">
                           {(
                             [
-                              { id: 'orange_money', label: 'Orange Money' },
-                              { id: 'wave', label: 'Wave Mali' },
-                              { id: 'moov_money', label: 'Moov Money' }
-                            ] as { id: PaymentMethod; label: string }[]
+                              {
+                                id: 'orange_money',
+                                label: 'Orange Money',
+                                logo: '/assets/payments/orange-money.png'
+                              },
+                              {
+                                id: 'wave',
+                                label: 'Wave',
+                                logo: '/assets/payments/wave.png'
+                              },
+                              {
+                                id: 'moov_money',
+                                label: 'Moov Money',
+                                logo: '/assets/payments/moov-money.png'
+                              }
+                            ] as { id: PaymentMethod; label: string; logo: string }[]
                           ).map((method) => (
                             <button
                               key={method.id}
                               type="button"
                               onClick={() => setPaymentMethod(method.id)}
-                              className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                              className={`p-3 rounded-2xl border flex flex-col items-center justify-center gap-1.5 text-center transition-all cursor-pointer ${
                                 paymentMethod === method.id
                                   ? 'border-theme-gold bg-theme-primary/20 text-white shadow-glow-gold'
                                   : 'border-white/10 bg-theme-surface/40 text-theme-text-muted hover:text-white'
                               }`}
                             >
-                              <span className="text-xs font-semibold block">{method.label}</span>
+                              <img
+                                src={method.logo}
+                                alt={method.label}
+                                className="w-8 h-8 object-contain"
+                              />
+                              <span className="text-[11px] font-semibold block">
+                                {method.label}
+                              </span>
                             </button>
                           ))}
                         </div>

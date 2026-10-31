@@ -108,11 +108,11 @@ export const INITIAL_PACKS: Pack[] = [
     isActive: true,
     image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Biscuits sablés « Mange-Moi » (150g)',
-      'Chocolats noirs 70% (120g)',
-      'Bonbons aux fruits (100g)',
-      'Petite clé dorée',
-      'Carte cadeau scellée'
+      'Sablés « Mange-Moi »',
+      'Chocolats 70%',
+      'Bonbons fruits',
+      'Clé dorée',
+      'Carte cadeau'
     ],
     features: [
       'Résiste à la chaleur',
@@ -123,20 +123,18 @@ export const INITIAL_PACKS: Pack[] = [
     id: 'pack-premium',
     slug: 'premium',
     name: 'Le Coffret du Chapelier',
-    tagline: 'Grand Coffret Prestige • 7 Créations',
+    tagline: 'Grand Coffret Prestige • 5 Créations',
     description: 'Chocolats pralinés, calissons, fiole sucrée « Bois-Moi » et montre dorée.',
     price: 25000,
     badge: 'Prestige',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Chocolats pralinés & ganaches (250g)',
-      'Calissons aux amandes (150g)',
-      'Nougat miel & pistache (120g)',
-      'Fiole sucrée « Bois-Moi »',
-      'Montre gousset dorée',
-      'Carte cadeau dorée',
-      'Grand coffret doré'
+      'Pralinés & ganaches',
+      'Calissons & nougat',
+      'Fiole « Bois-Moi »',
+      'Montre dorée',
+      'Carte cadeau dorée'
     ],
     features: [
       'Grand coffret cadeau',
@@ -154,11 +152,11 @@ export const INITIAL_PACKS: Pack[] = [
     isActive: true,
     image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Cœurs en chocolat rouge (180g)',
-      'Guimauves à la rose (100g)',
-      'Truffes au cacao noir (120g)',
-      'Carte Royale dorée',
-      'Sceau de cire rouge'
+      'Cœurs chocolat',
+      'Guimauves rose',
+      'Truffes cacao',
+      'Carte Royale',
+      'Sceau de cire'
     ],
     features: [
       'Série limitée',
@@ -180,11 +178,11 @@ export const BAMAKO_DELIVERY_ZONES: DeliveryZone[] = [
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   merchantPhones: {
-    orange_money: { number: '+223 70 00 00 00', name: 'Maison Alice SARL' },
-    wave: { number: '+223 70 00 00 00', name: 'Maison Alice SARL' },
-    moov_money: { number: '+223 60 00 00 00', name: 'Maison Alice SARL' },
+    orange_money: { number: '+223 71 03 96 47', name: 'Maison Alice' },
+    wave: { number: '+223 71 03 96 47', name: 'Maison Alice' },
+    moov_money: { number: '+223 71 03 96 47', name: 'Maison Alice' },
   },
-  whatsappNotificationNumber: '+223 70 00 00 00',
+  whatsappNotificationNumber: '+223 71 03 96 47',
   siteNotice: 'Livraison offerte à Bamako 7j/7.',
   currency: 'FCFA',
   adminEmail: '',
@@ -194,10 +192,10 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   footerLinks: {
     instagram: 'https://instagram.com/maisonalice_bamako',
     tiktok: 'https://tiktok.com/@maisonalice',
-    whatsapp: 'https://wa.me/22370000000',
+    whatsapp: 'https://wa.me/22371039647',
     facebook: 'https://facebook.com/maisonalice',
-    address: 'ACI 2000, Bamako - Mali',
-    phone: '+223 70 00 00 00',
-    legalText: 'Maison Alice SARL — Bamako.'
+    address: 'ACI 2000, Bamako',
+    phone: '+223 71 03 96 47',
+    legalText: 'Maison Alice'
   }
 };

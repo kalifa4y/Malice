@@ -41,8 +41,8 @@ describe('Maison Alice — Business Logic, Admin Email Recovery & Verification T
         createdAt: new Date().toISOString()
       };
 
-      const url = generateWhatsAppOrderUrl(mockOrder, '+223 70 00 00 00');
-      expect(url).toContain('wa.me/22370000000');
+      const url = generateWhatsAppOrderUrl(mockOrder, '+223 71 03 96 47');
+      expect(url).toContain('wa.me/22371039647');
       expect(url).toContain(encodeURIComponent('Fatoumata Coulibaly'));
       expect(url).toContain(encodeURIComponent('#MA-2026-7890'));
     });
@@ -85,12 +85,15 @@ describe('Maison Alice — Business Logic, Admin Email Recovery & Verification T
       expect(THEMES.queen_of_hearts_evening.colors.primary).toBe('#dc1e35');
     });
 
-    it('uses simple, accessible French names for all gift packs without obscure or English terms', () => {
+    it('uses simple, accessible French names and 5 items (3+2 layout) for all gift packs', () => {
       expect(INITIAL_PACKS.map((p) => p.name)).toEqual([
         "Le Coffret d'Alice",
         'Le Coffret du Chapelier',
         'Le Coffret de la Reine'
       ]);
+      INITIAL_PACKS.forEach((p) => {
+        expect(p.contents.length).toBe(5);
+      });
       const serialized = JSON.stringify(INITIAL_PACKS);
       expect(serialized).not.toMatch(/Underland|Marmoreal|Salazen|Tulgey|Chronosphère/i);
     });

@@ -1,6 +1,6 @@
 import { Order } from '../types';
 
-export function generateWhatsAppOrderUrl(order: Order, merchantPhone: string = '22370000000'): string {
+export function generateWhatsAppOrderUrl(order: Order, merchantPhone: string = '22371039647'): string {
   const paymentLabels: Record<string, string> = {
     orange_money: 'Orange Money',
     wave: 'Wave',

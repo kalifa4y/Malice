@@ -29,7 +29,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
       id="packs-showcase"
       className="relative py-20 px-4 max-w-7xl mx-auto flex flex-col items-center pointer-events-none"
     >
-      {/* Compact Illustrated Heading */}
+      {/* En-tête de section */}
       <div className="text-center max-w-lg mx-auto mb-12 pointer-events-auto flex flex-col items-center">
         <div className="text-theme-gold mb-2">
           <AnimatedHatterHatSvg className="w-12 h-12" />
@@ -42,10 +42,13 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
         </p>
       </div>
 
-      {/* Visual Cards Grid */}
+      {/* Grille des 3 Coffrets */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 w-full pointer-events-auto items-stretch">
         {activePacks.map((pack) => {
           const isFeatured = pack.slug === 'premium';
+          const items = pack.contents || [];
+          const totalItems = items.length;
+
           return (
             <article
               key={pack.id}
@@ -56,7 +59,7 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
               }`}
             >
               <div>
-                {/* Image Header with Price & Title */}
+                {/* Visuel du coffret avec Prix & Titre */}
                 <div className="relative w-full aspect-[16/10] overflow-hidden bg-black/50 border-b border-white/10">
                   <img
                     src={pack.image}
@@ -90,28 +93,41 @@ export const PackShowcase: React.FC<PackShowcaseProps> = ({
                   </div>
                 </div>
 
-                {/* Illustrated Composition Pills (Zero Wall of Text) */}
-                <div className="p-5 sm:p-6">
-                  {pack.contents && pack.contents.length > 0 && (
-                    <div className="grid grid-cols-1 gap-2">
-                      {pack.contents.map((item, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs sm:text-[13px] text-theme-text font-medium"
-                        >
-                          <span className="w-6 h-6 rounded-lg bg-theme-primary/20 border border-theme-primary/40 flex items-center justify-center flex-shrink-0 text-theme-gold">
-                            <ItemMicroIllustration text={item} className="w-3.5 h-3.5" />
-                          </span>
-                          <span className="truncate">{item}</span>
-                        </div>
-                      ))}
+                {/* Grille de petits blocs (3 en haut + 2 en bas) */}
+                <div className="p-4 sm:p-5">
+                  {totalItems > 0 && (
+                    <div className="grid grid-cols-6 gap-2.5">
+                      {items.map((item, i) => {
+                        // Si 5 éléments : les 3 premiers prennent 2 colonnes (3 en haut), les 2 derniers prennent 3 colonnes (2 en bas)
+                        const isBottomPair = totalItems % 3 === 2 && i >= totalItems - 2;
+                        const isSingleLast = totalItems % 3 === 1 && i === totalItems - 1;
+                        const spanClass = isBottomPair
+                          ? 'col-span-3'
+                          : isSingleLast
+                            ? 'col-span-6'
+                            : 'col-span-2';
+
+                        return (
+                          <div
+                            key={i}
+                            className={`${spanClass} min-h-[76px] p-2.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-theme-gold/35 transition-colors flex flex-col items-center justify-center text-center gap-1.5`}
+                          >
+                            <span className="w-7 h-7 rounded-xl bg-theme-primary/20 border border-theme-primary/40 flex items-center justify-center flex-shrink-0 text-theme-gold">
+                              <ItemMicroIllustration text={item} className="w-3.5 h-3.5" />
+                            </span>
+                            <span className="text-[11px] sm:text-xs text-theme-text font-medium leading-tight line-clamp-2 break-words max-w-full">
+                              {item}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Card Action Footer */}
-              <div className="p-5 sm:p-6 pt-0">
+              {/* Bouton Commander */}
+              <div className="p-4 sm:p-5 pt-0">
                 <button
                   type="button"
                   onClick={() => onSelectPack(pack)}

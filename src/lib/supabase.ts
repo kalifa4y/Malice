@@ -16,9 +16,9 @@ export const supabase = isSupabaseConfigured
 // Local Persistence Fallback for offline, preview & demo
 const STORAGE_KEYS = {
   ORDERS: 'maison_alice_orders',
-  PACKS: 'maison_alice_packs_v4',
+  PACKS: 'maison_alice_packs_v5',
   ZONES: 'maison_alice_zones',
-  SETTINGS: 'maison_alice_settings',
+  SETTINGS: 'maison_alice_settings_v2',
   ADMIN_SESSION: 'maison_alice_admin_auth'
 };
 

@@ -48,11 +48,11 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
     footerLinks: {
       instagram: settings.footerLinks?.instagram || 'https://instagram.com/maisonalice_bamako',
       tiktok: settings.footerLinks?.tiktok || 'https://tiktok.com/@maisonalice',
-      whatsapp: settings.footerLinks?.whatsapp || 'https://wa.me/22370000000',
+      whatsapp: settings.footerLinks?.whatsapp || 'https://wa.me/22371039647',
       facebook: settings.footerLinks?.facebook || 'https://facebook.com/maisonalice',
-      address: settings.footerLinks?.address || 'ACI 2000, Bamako - Mali',
-      phone: settings.footerLinks?.phone || '+223 70 00 00 00',
-      legalText: settings.footerLinks?.legalText || 'Maison Alice SARL — Bamako.'
+      address: settings.footerLinks?.address || 'ACI 2000, Bamako',
+      phone: settings.footerLinks?.phone || '+223 71 03 96 47',
+      legalText: settings.footerLinks?.legalText || 'Maison Alice'
     }
   });
 
@@ -338,7 +338,10 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
       {activeTab === 'payments' && (
         <div className="space-y-4">
           <div className="p-5 rounded-3xl bg-orange-500/10 border border-orange-500/30 space-y-3">
-            <div className="text-sm font-bold text-orange-400">Orange Money</div>
+            <div className="flex items-center gap-2.5 text-sm font-bold text-orange-400">
+              <img src="/assets/payments/orange-money.png" alt="Orange Money" className="w-6 h-6 object-contain" />
+              <span>Orange Money</span>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-theme-text-muted block mb-1">
@@ -374,7 +377,10 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
           </div>
 
           <div className="p-5 rounded-3xl bg-sky-500/10 border border-sky-500/30 space-y-3">
-            <div className="text-sm font-bold text-sky-400">Wave</div>
+            <div className="flex items-center gap-2.5 text-sm font-bold text-sky-400">
+              <img src="/assets/payments/wave.png" alt="Wave" className="w-6 h-6 object-contain" />
+              <span>Wave</span>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-theme-text-muted block mb-1">
@@ -410,7 +416,10 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onSa
           </div>
 
           <div className="p-5 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 space-y-3">
-            <div className="text-sm font-bold text-emerald-400">Moov Money</div>
+            <div className="flex items-center gap-2.5 text-sm font-bold text-emerald-400">
+              <img src="/assets/payments/moov-money.png" alt="Moov Money" className="w-6 h-6 object-contain" />
+              <span>Moov Money</span>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-theme-text-muted block mb-1">

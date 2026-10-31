@@ -4,7 +4,7 @@ export const THEMES: Record<string, ThemeConfig> = {
   mad_hatter_day: {
     id: 'mad_hatter_day',
     name: 'Royaume de Marmoreal',
-    subName: "Le Monde Éveillé • Reine Blanche & Jardin d'Absolem",
+    subName: 'Le Monde Éveillé • Reine Blanche',
     character: 'Marmoreal • Monde Éveillé',
     timeRange: '08h00 — 16h00',
     startHour: 8,
@@ -35,7 +35,7 @@ export const THEMES: Record<string, ThemeConfig> = {
   cheshire_night: {
     id: 'cheshire_night',
     name: 'Bois de Tulgey • 10/6',
-    subName: 'Le Monde de la Nuit • Tarrant Hightopp & Cheshire',
+    subName: 'Le Monde de la Nuit • Chapelier Fou',
     character: 'Bois de Tulgey • Nuit 10/6',
     timeRange: '00h00 — 08h00',
     startHour: 0,
@@ -66,7 +66,7 @@ export const THEMES: Record<string, ThemeConfig> = {
   queen_of_hearts_evening: {
     id: 'queen_of_hearts_evening',
     name: 'Cour de Salazen Grum',
-    subName: 'Le Royaume Écarlate • Reine Rouge Iracebeth',
+    subName: 'Le Royaume Écarlate • Reine Rouge',
     character: 'Salazen Grum • Cour Rouge',
     timeRange: '16h00 — 00h00',
     startHour: 16,
@@ -101,74 +101,68 @@ export const INITIAL_PACKS: Pack[] = [
     id: 'pack-normal',
     slug: 'normal',
     name: "L'Écrin de Marmoreal",
-    tagline: 'Upelkuchen « Mange-Moi » & Douceurs du Monde Éveillé',
-    description:
-      "Inspiré du palais d'albâtre de la Reine Blanche Mirana. Un coffret rigide doré à chaud réunissant biscuits « Upelkuchen », chocolats grands crus stabilisés pour le climat de Bamako et la clé dorée qui ouvre les portes d'Underland.",
+    tagline: 'Royaume Blanc • 5 Créations',
+    description: 'Sablés « Mange-Moi », chocolats 70% et Clé d’Or d’Underland.',
     price: 15000,
-    badge: 'Royaume de Marmoreal',
+    badge: 'Marmoreal',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Sablés royaux « Upelkuchen » (Mange-Moi) pur beurre & vanille bourbon (150g)',
-      'Dragées fines au chocolat noir grand cru 70% stabilisé (120g)',
-      'Perles gélifiées aux élixirs de fruits exotiques (100g)',
-      "Clé dorée du Terrier d'Underland en laiton poli",
-      'Écrin rigide doré à chaud façon grimoire de Marmoreal'
+      'Sablés « Mange-Moi » (150g)',
+      'Dragées Chocolat 70% (120g)',
+      'Perles Fruits Exotiques (100g)',
+      "Clé d'Or d'Underland",
+      'Carte Scellée à la Cire'
     ],
     features: [
-      'Chocolats stabilisés haute tenue pour le climat de Bamako',
-      'Parchemin calligraphié « Mange-Moi » personnalisable',
-      'Livraison isotherme gratuite sur les deux rives'
+      'Tenue Tropicale',
+      'Livraison Offerte'
     ]
   },
   {
     id: 'pack-premium',
     slug: 'premium',
-    name: 'Le Banquet 10/6 du Chapelier Fou',
-    tagline: 'Table de Tarrant Hightopp • Haute Confiserie d’Underland',
-    description:
-      "L'écrin magistral de Tarrant Hightopp (le Chapelier Fou). Six créations impossibles avant le petit-déjeuner : pralinés grands crus, calissons royaux, fiole d'élixir « Pishsalver » (Bois-Moi) et montre Chronosphère dorée.",
+    name: 'Le Banquet 10/6 du Chapelier',
+    tagline: 'Table de Tarrant • 7 Créations',
+    description: 'Pralinés, calissons, Fiole « Bois-Moi » et Montre Chronosphère.',
     price: 25000,
-    badge: 'Signature 10/6 • Best-Seller',
+    badge: 'Signature 10/6',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1582293041079-7814c2f12063?auto=format&fit=crop&w=900&q=80',
     contents: [
-      "Pralinés & ganaches d'exception de la Table du Thé (250g)",
-      "Véritables Calissons royaux aux amandes douces (150g)",
-      'Nougat fondant du Bois de Tulgey au miel & pistaches (120g)',
-      'Pâtes de fruits impériales cassis, framboise et mangue (100g)',
-      'Fiole « Pishsalver » (Bois-Moi) garnie de perles sucrées dorées',
-      "Montre à gousset dorée Chronosphère & carte officielle 10/6 du Chapelier",
-      "Grand coffret d'apparat gaufré or et ruban cuivre scellé"
+      'Pralinés & Ganaches (250g)',
+      'Calissons aux Amandes (150g)',
+      'Nougat Miel & Pistache (120g)',
+      'Fiole « Bois-Moi » Sucrée',
+      'Montre Or Chronosphère',
+      'Carte Officielle 10/6',
+      'Grand Coffret Doré à Chaud'
     ],
     features: [
-      'Expérience complète inspirée du banquet de Tarrant Hightopp',
-      'Livraison VIP gratuite en sac isotherme sécurisé à Bamako',
-      'Lettre parchemin de l’Oraculum scellée à la cire d’or'
+      'Coffret Prestige',
+      'Livraison VIP Offerte'
     ]
   },
   {
     id: 'pack-seasonal',
     slug: 'seasonal',
     name: 'Le Décret de Salazen Grum',
-    tagline: 'Cour de la Reine Rouge • Roses Peintes & Cœurs Rubis',
-    description:
-      "Forgé pour la cour d'Iracebeth à Salazen Grum. Cœurs en glaçage rubis, truffes poudrées au cacao d'Afrique de l'Ouest, guimauves telles des roses blanches peintes en rouge et sceau royal cacheté à la main.",
+    tagline: 'Cour Écarlate • 5 Créations',
+    description: 'Cœurs rubis, truffes grand cru et Roses Blanches Peintes.',
     price: 20000,
-    badge: 'Cour Écarlate • Série Limitée',
+    badge: 'Cour Rouge',
     isActive: true,
     image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=900&q=80',
     contents: [
-      'Cœurs fondants glaçage rubis & framboise de Salazen Grum (180g)',
-      "Guimauves « Roses Blanches Peintes en Rouge » à la fleur d'oranger (100g)",
-      "Truffes noires au cacao grand cru d'Afrique de l'Ouest (120g)",
-      "Carte Soldat officielle dorée de la Cour d'Iracebeth",
-      'Sceau de cire rouge sang cacheté à la main'
+      'Cœurs Glaçage Rubis (180g)',
+      'Guimauves Roses Peintes (100g)',
+      'Truffes Cacao Noir (120g)',
+      'Carte Soldat Dorée',
+      'Sceau de Cire Rouge Sang'
     ],
     features: [
-      'Édition collector disponible en série limitée à Bamako',
-      'Esthétique gothique-royale de la Cour de Salazen Grum',
-      'Déballage théâtral avec carte personnalisée'
+      'Série Limitée',
+      'Livraison Offerte'
     ]
   }
 ];
@@ -191,7 +185,7 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
     moov_money: { number: '+223 60 00 00 00', name: 'Maison Alice SARL' },
   },
   whatsappNotificationNumber: '+223 70 00 00 00',
-  siteNotice: 'Livraison express offerte partout à Bamako 7j/7 dans nos sacs isothermes sécurisés.',
+  siteNotice: 'Livraison offerte à Bamako 7j/7.',
   currency: 'FCFA',
   adminEmail: '',
   adminPassword: 'admin',

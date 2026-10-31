@@ -56,14 +56,14 @@ export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
             onClick={() => scrollTo('packs-showcase')}
             className="px-4 py-2 rounded-full text-theme-text/85 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
           >
-            Les Collections
+            Les Coffrets
           </button>
           <button
             type="button"
             onClick={() => scrollTo('how-it-works')}
             className="px-4 py-2 rounded-full text-theme-text/85 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
           >
-            L&apos;Expérience
+            En 3 Instants
           </button>
           <button
             type="button"
@@ -72,16 +72,9 @@ export const LuxuryHeader: React.FC<LuxuryHeaderProps> = ({
           >
             Livraison &amp; Paiement
           </button>
-          <button
-            type="button"
-            onClick={() => scrollTo('faq-section')}
-            className="px-4 py-2 rounded-full text-theme-text/85 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
-          >
-            Questions Fréquentes
-          </button>
         </nav>
 
-        {/* Right Controls: 3 Hours of Alice Switcher + Order CTA */}
+        {/* Right Controls: 3 Realms Switcher + Order CTA */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <MagicClockToggle
             currentTheme={currentTheme}

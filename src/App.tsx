@@ -8,7 +8,6 @@ import { HeroSection } from './components/sections/HeroSection';
 import { PackShowcase } from './components/sections/PackShowcase';
 import { HowItWorksSection } from './components/sections/HowItWorksSection';
 import { BamakoDeliveryPaymentSection } from './components/sections/BamakoDeliveryPaymentSection';
-import { DeliveryFaqSection } from './components/sections/DeliveryFaqSection';
 import { Footer } from './components/sections/Footer';
 import { OrderDrawer } from './components/order/OrderDrawer';
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -103,7 +102,7 @@ export function App() {
         onResetToRealTime={resetToRealTime}
       />
 
-      {/* Main Editorial Content Sections */}
+      {/* Main Distilled Content Sections */}
       <main className="relative z-10">
         {/* 1. Hero Section */}
         <HeroSection
@@ -115,21 +114,18 @@ export function App() {
           siteNotice={settings.siteNotice}
         />
 
-        {/* 2. Detailed Underland Collections Showcase */}
+        {/* 2. Illustrated Underland Collections Showcase */}
         <PackShowcase
           packs={packs}
           currentTheme={currentTheme}
           onSelectPack={(pack) => handleOpenOrder(pack)}
         />
 
-        {/* 3. The 3-Step Oraculum Ordering Ritual */}
+        {/* 3. Illustrated 3-Step Ordering Ritual */}
         <HowItWorksSection onOpenOrder={() => handleOpenOrder()} />
 
-        {/* 4. Free Bamako Insulated Delivery & Mobile Money Payments */}
+        {/* 4. Compact Free Bamako Delivery & Mobile Money Strip */}
         <BamakoDeliveryPaymentSection onOpenOrder={() => handleOpenOrder()} />
-
-        {/* 5. FAQ & Guarantees */}
-        <DeliveryFaqSection currentTheme={currentTheme} />
       </main>
 
       {/* Luxury Footer (without public Admin button) */}
